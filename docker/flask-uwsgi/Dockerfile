@@ -26,7 +26,7 @@ RUN set -x \
 
 ## END: GOSU
 
-COPY docker/flask-uwsgi/entrypoint.sh /
+COPY docker/flask-uwsgi/docker-entrypoint.sh /
 
 RUN mkdir ${CODE_DIR} && chown -R uwsgi:uwsgi ${CODE_DIR}
 WORKDIR ${CODE_DIR}
@@ -35,7 +35,7 @@ ADD flask-todo/requirements.txt ${CODE_DIR}/requirements.txt
 
 RUN BUILD_DEPS='gcc python-pip' \
     && apt-get update \
-    && apt-get install -y --no-install-recommends python-dev "$BUILD_DEPS" \
+    && apt-get install -y --no-install-recommends python-dev libmysqlclient-dev $BUILD_DEPS \
     && pip install --upgrade pip \
     && pip install setuptools==28.3.0 \
     && pip install uwsgi==2.0.14 \
@@ -43,11 +43,11 @@ RUN BUILD_DEPS='gcc python-pip' \
     && pip uninstall -y \
         setuptools \
         pip \
-    && apt-get purge -y --auto-remove "$BUILD_DEPS" \
+    && apt-get purge -y --auto-remove $BUILD_DEPS \
     && rm -rf /var/lib/apt/lists/*
 
 ADD flask-todo ${CODE_DIR}
 RUN chown -R uwsgi:uwsgi ${CODE_DIR}
 
-ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["uwsgi"]

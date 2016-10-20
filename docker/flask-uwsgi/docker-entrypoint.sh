@@ -68,6 +68,19 @@ if [ "$1" = 'uwsgi' -a "$(id -u)" = '0' ]; then
     set -- "$@" --processes $UWSGI_PROCESSES --threads $UWSGI_THREADS --threads-stacksize $UWSGI_THREADS_STACKSIZE
     set -- "$@" --chdir $UWSGI_PROJECT_HOME --pp $UWSGI_PROJECT_HOME --module $UWSGI_SERVICE_MODULE
 
+    SETTINGS_CFG_FILE=$UWSGI_PROJECT_HOME/instance/settings.cfg
+
+    if [ ! -f $SETTINGS_CFG_FILE ]; then
+		echo 'Flask uwsgi creating settings.cfg file'
+
+		cat <<- EOF > "$SETTINGS_CFG_FILE"
+TEMPLATES_AUTO_RELOAD = True
+
+SQLALCHEMY_DATABASE_URI = 'mysql://$MYSQL_USER:$MYSQL_PASSWORD@db:3306/$MYSQL_DATABASE'
+EOF
+
+    fi
+
     # Now execute under the uwsgi user
     set -- gosu uwsgi "$@"
 fi
