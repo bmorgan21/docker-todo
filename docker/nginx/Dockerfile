@@ -10,6 +10,9 @@ FROM ubuntu:xenial
 
 MAINTAINER Docker Todo "docker-todo@gocatalant.com"
 
+# Ensure non-interactive mode
+ENV DEBIAN_FRONTEND noninteractive
+
 ENV NGINX_VERSION 1.10.2*
 
 RUN apt-key adv --keyserver hkp://pgp.mit.edu:80 --recv-keys 573BFD6B3D8FBC641079A6ABABF5BD827BD9BF62 \

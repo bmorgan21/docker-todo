@@ -1,17 +1,31 @@
 version: '2'
+
 services:
   db:
     image: mysql:5.7
     environment:
-      - MYSQL_ROOT_PASSWORD=XX34!dfd%sd^&
-      - MYSQL_DATABASE=todo_app
-      - MYSQL_USER=web_user
-      - MYSQL_PASSWORD=password
-  web:
-    image: brianmorgan/flask-uwsgi
-    ports:
-      - "8080:5000"
+      MYSQL_ROOT_PASSWORD: XX34!dfd%sd^&
+      MYSQL_DATABASE: todo_app
+      MYSQL_USER: web_user
+      MYSQL_PASSWORD: password
+
+  nginx:
+    image: brianmorgan/nginx:latest
+    depends_on:
+      - web
     environment:
-      - UWSGI_HTTP_PORT=5000
+      HTTP_UPSTREAM_HOST: web
+      HTTP_UPSTREAM_PORT: 5000
+    links:
+      - web
+    ports:
+      - "80:80"
+
+  web:
+    image: brianmorgan/flask-uwsgi:latest
     depends_on:
       - db
+    environment:
+      UWSGI_HTTP_PORT: 5000
+    ports:
+      - "8080:5000"
