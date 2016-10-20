@@ -1,0 +1,42 @@
+.modal {
+    background-color: white;
+    margin: 100px auto 10px auto;
+    min-height: 300px;
+    width: 390px;
+}
+
+@media (max-width: 400px) {
+    .modal {
+        width:310px;
+    }
+}
+
+@media (max-height: 480px) {
+    .modal {
+        margin: 50px auto 10px auto;
+    }
+}
+
+@media (max-height: 350px) {
+    .modal {
+        margin: 10px auto;
+    }
+}
+
+.modal h2 {
+    padding: 10px;
+}
+
+.modal .body {
+    padding: 10px;
+}
+
+
+/* Login */
+.page-login {
+    padding:15px;
+    max-width: 370px;
+    margin: 15px auto;
+}
+
+/* End Login */
