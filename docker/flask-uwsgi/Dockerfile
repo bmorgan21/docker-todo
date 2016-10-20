@@ -1,13 +1,16 @@
 FROM ubuntu:xenial
 
-ENV PYTHONUNBUFFERED 1
-ENV CODE_DIR /var/code
+# Ensure non-interactive mode
+ENV DEBIAN_FRONTEND noninteractive
 
 # Add our user and group first to make sure their IDs get assigned consistently, regardless of whatever dependencies get added
 RUN groupadd -r uwsgi && useradd -r -g uwsgi uwsgi
 
+ENV PYTHONUNBUFFERED 1
+ENV CODE_DIR /var/code
+
 ## START: GOSU
-ENV GOSU_VERSION 1.9
+ENV GOSU_VERSION 1.10
 RUN set -x \
     && apt-get update && apt-get install -y --no-install-recommends ca-certificates wget && rm -rf /var/lib/apt/lists/* \
     && dpkgArch="$(dpkg --print-architecture | awk -F- '{ print $NF }')" \
@@ -30,9 +33,9 @@ WORKDIR ${CODE_DIR}
 
 ADD flask-todo/requirements.txt ${CODE_DIR}/requirements.txt
 
-RUN buildDeps='gcc python-pip' \
+RUN BUILD_DEPS='gcc python-pip' \
     && apt-get update \
-    && apt-get install -y --no-install-recommends python-dev $buildDeps \
+    && apt-get install -y --no-install-recommends python-dev "$BUILD_DEPS" \
     && pip install --upgrade pip \
     && pip install setuptools==28.3.0 \
     && pip install uwsgi==2.0.14 \
@@ -40,7 +43,7 @@ RUN buildDeps='gcc python-pip' \
     && pip uninstall -y \
         setuptools \
         pip \
-    && apt-get purge -y --auto-remove $buildDeps \
+    && apt-get purge -y --auto-remove "$BUILD_DEPS" \
     && rm -rf /var/lib/apt/lists/*
 
 ADD flask-todo ${CODE_DIR}
