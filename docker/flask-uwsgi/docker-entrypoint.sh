@@ -77,6 +77,7 @@ if [ "$1" = 'uwsgi' -a "$(id -u)" = '0' ]; then
 TEMPLATES_AUTO_RELOAD = True
 
 SQLALCHEMY_DATABASE_URI = 'mysql://$MYSQL_USER:$MYSQL_PASSWORD@db:3306/$MYSQL_DATABASE'
+
 EOF
 
     fi

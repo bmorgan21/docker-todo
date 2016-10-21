@@ -4,3 +4,4 @@ SQLAlchemyTypes==0.2.1
 enum21==0.2.0
 validation21==0.2.1
 MySQL-python==1.2.5
+flask-restplus==0.9.2

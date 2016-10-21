@@ -1,8 +1,8 @@
 from flask import Blueprint, render_template
 
-mod = Blueprint('todo', __name__)
+bp = Blueprint('view.todo', __name__)
 
 
-@mod.route("/")
+@bp.route("/")
 def index():
     return render_template('index.html')
