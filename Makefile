@@ -6,6 +6,9 @@ db-exec-shell:
 web-build:
 	docker build -f docker/flask-uwsgi/Dockerfile -t brianmorgan/flask-uwsgi:latest .
 
+web-push: web-build
+	docker push brianmorgan/flask-uwsgi:latest
+
 web-run:
 	docker run -it brianmorgan/flask-uwsgi
 
