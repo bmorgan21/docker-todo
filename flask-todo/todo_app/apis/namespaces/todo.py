@@ -1,14 +1,16 @@
+from flask import request
 from flask_restplus import Namespace, Resource, fields
 
 from todo_app.services import todo as todo_svc
+from todo_app.models import db
 
 
 ns = Namespace('todos', description='TODO operations')
 
 todo = ns.model('Todo', {
     'id': fields.Integer(readOnly=True, description='The task unique identifier'),
-    'task': fields.String(required=True, description='The task details'),
-    'is_complete': fields.Boolean(description='Mark whether the task is complete')
+    'title': fields.String(required=True, description='The task details', attribute='name'),
+    'completed': fields.Boolean(description='Mark whether the task is complete', attribute='is_complete')
 })
 
 
@@ -26,7 +28,11 @@ class TodoList(Resource):
     @ns.marshal_with(todo, code=201)
     def post(self):
         '''Create a new task'''
-        return todo_svc.create_from_dict(ns.payload), 201
+        todo = todo_svc.create_from_dict(request.json)
+
+        db.session.commit()
+
+        return todo, 201
 
 
 @ns.route('/<int:id>')
@@ -45,10 +51,17 @@ class Todo(Resource):
     def delete(self, id):
         '''Delete a task given its identifier'''
         todo_svc.delete(id)
+
+        db.session.commit()
+
         return '', 204
 
     @ns.expect(todo)
     @ns.marshal_with(todo)
     def put(self, id):
         '''Update a task given its identifier'''
-        return todo_svc.update(id, ns.payload)
+        todo = todo_svc.update(id, request.json)
+
+        db.session.commit()
+
+        return todo, 204

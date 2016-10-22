@@ -1,8 +1,24 @@
 from todo_app.models import db, Todo
 
 
+def transform_data(d):
+    result = {}
+
+    map = {
+        'id': 'id',
+        'title': 'name',
+        'completed': 'is_complete'
+    }
+
+    for k, v in d.items():
+        if k in map:
+            result[map[k]] = v
+
+    return result
+
+
 def create_from_dict(d):
-    todo = Todo(**d.items())
+    todo = Todo(**transform_data(d))
 
     db.session.add(todo)
 
@@ -22,15 +38,10 @@ def get_all():
 def update(id, d):
     todo = get(id)
 
-    map = {
-        'task': 'name'
-    }
+    d = transform_data(d)
 
     for k, v in d.items():
-        if hasattr(todo, k):
-            setattr(todo, k, v)
-        elif k in map:
-            setattr(todo, map[k], v)
+        setattr(todo, k, v)
 
     return todo
 

@@ -27,20 +27,16 @@ jQuery(function ($) {
 		},
 		pluralize: function (count, word) {
 			return count === 1 ? word : word + 's';
-		},
-		store: function (namespace, data) {
-			if (arguments.length > 1) {
-				return localStorage.setItem(namespace, JSON.stringify(data));
-			} else {
-				var store = localStorage.getItem(namespace);
-				return (store && JSON.parse(store)) || [];
-			}
 		}
 	};
 
 	var App = {
 		init: function () {
-			this.todos = util.store('todos-jquery');
+            this.todos = [];
+            $.getJSON('/api/todos/', function(todos) {
+                this.todos = todos;
+                this.render();
+            }.bind(this));
 			this.todoTemplate = Handlebars.compile($('#todo-template').html());
 			this.footerTemplate = Handlebars.compile($('#footer-template').html());
 			this.bindEvents();
@@ -70,7 +66,6 @@ jQuery(function ($) {
 			$('#toggle-all').prop('checked', this.getActiveTodos().length === 0);
 			this.renderFooter();
 			$('#new-todo').focus();
-			util.store('todos-jquery', this.todos);
 		},
 		renderFooter: function () {
 			var todoCount = this.todos.length;
@@ -89,6 +84,7 @@ jQuery(function ($) {
 
 			this.todos.forEach(function (todo) {
 				todo.completed = isChecked;
+                this.updateTodo(todo.id, {completed: todo.completed});
 			});
 
 			this.render();
@@ -115,6 +111,9 @@ jQuery(function ($) {
 			return this.todos;
 		},
 		destroyCompleted: function () {
+            $.each(this.getCompletedTodos(), function(index, todo) {
+                this.deleteTodo(todo.id);
+            }.bind(this));
 			this.todos = this.getActiveTodos();
 			this.filter = 'all';
 			this.render();
@@ -132,6 +131,21 @@ jQuery(function ($) {
 				}
 			}
 		},
+        updateTodo: function(id, data) {
+            $.ajax({
+                url: '/api/todos/' + id,
+                method: 'PUT',
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+                dataType: 'json'
+            });
+        },
+        deleteTodo: function(id) {
+            $.ajax({
+                url: '/api/todos/' + id,
+                type: 'DELETE'
+            });
+        },
 		create: function (e) {
 			var $input = $(e.target);
 			var val = $input.val().trim();
@@ -140,11 +154,27 @@ jQuery(function ($) {
 				return;
 			}
 
-			this.todos.push({
-				id: util.uuid(),
+            var data = {
 				title: val,
 				completed: false
-			});
+			};
+
+            var todo = {
+                id: util.uuid()
+            };
+            $.extend(todo, data);
+
+			this.todos.push(todo);
+            $.ajax({
+                url: '/api/todos/',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+                dataType: 'json'
+            }).then(function(newTodo) {
+                $('#todo-list').find('li[data-id="' + todo.id + '"]').data('id', newTodo.id);
+                $.extend(todo, newTodo);
+            });
 
 			$input.val('');
 
@@ -152,7 +182,11 @@ jQuery(function ($) {
 		},
 		toggle: function (e) {
 			var i = this.indexFromEl(e.target);
-			this.todos[i].completed = !this.todos[i].completed;
+            var todo = this.todos[i];
+			todo.completed = !todo.completed;
+
+            this.updateTodo(todo.id, {completed: todo.completed});
+
 			this.render();
 		},
 		edit: function (e) {
@@ -181,12 +215,17 @@ jQuery(function ($) {
 			if ($el.data('abort')) {
 				$el.data('abort', false);
 			} else {
-				this.todos[this.indexFromEl(el)].title = val;
+                var todo = this.todos[this.indexFromEl(el)];
+				todo.title = val;
+                this.updateTodo(todo.id, {title: val});
 			}
 
 			this.render();
 		},
 		destroy: function (e) {
+            var index = this.indexFromEl(e.target);
+            var todo = this.todos[index];
+            this.deleteTodo(todo.id);
 			this.todos.splice(this.indexFromEl(e.target), 1);
 			this.render();
 		}
