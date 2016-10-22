@@ -84,7 +84,7 @@ jQuery(function ($) {
 
 			this.todos.forEach(function (todo) {
 				todo.completed = isChecked;
-                this.updateTodo(todo.id, {completed: todo.completed});
+                Model.Todo.update(todo.id, {completed: todo.completed});
 			});
 
 			this.render();
@@ -112,7 +112,7 @@ jQuery(function ($) {
 		},
 		destroyCompleted: function () {
             $.each(this.getCompletedTodos(), function(index, todo) {
-                this.deleteTodo(todo.id);
+                Model.Todo.delete(todo.id);
             }.bind(this));
 			this.todos = this.getActiveTodos();
 			this.filter = 'all';
@@ -131,21 +131,6 @@ jQuery(function ($) {
 				}
 			}
 		},
-        updateTodo: function(id, data) {
-            $.ajax({
-                url: '/api/todos/' + id,
-                method: 'PUT',
-                contentType: 'application/json',
-                data: JSON.stringify(data),
-                dataType: 'json'
-            });
-        },
-        deleteTodo: function(id) {
-            $.ajax({
-                url: '/api/todos/' + id,
-                type: 'DELETE'
-            });
-        },
 		create: function (e) {
 			var $input = $(e.target);
 			var val = $input.val().trim();
@@ -154,25 +139,16 @@ jQuery(function ($) {
 				return;
 			}
 
-            var data = {
+            var id = util.uuid();
+            var todo = {
+                id: id,
 				title: val,
 				completed: false
 			};
 
-            var todo = {
-                id: util.uuid()
-            };
-            $.extend(todo, data);
-
 			this.todos.push(todo);
-            $.ajax({
-                url: '/api/todos/',
-                method: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify(data),
-                dataType: 'json'
-            }).then(function(newTodo) {
-                $('#todo-list').find('li[data-id="' + todo.id + '"]').data('id', newTodo.id);
+            Model.Todo.create(todo).then(function(newTodo) {
+                $('#todo-list').find('li[data-id="' + id + '"]').data('id', newTodo.id);
                 $.extend(todo, newTodo);
             });
 
@@ -185,7 +161,7 @@ jQuery(function ($) {
             var todo = this.todos[i];
 			todo.completed = !todo.completed;
 
-            this.updateTodo(todo.id, {completed: todo.completed});
+            Model.Todo.update(todo.id, {completed: todo.completed});
 
 			this.render();
 		},
@@ -217,7 +193,7 @@ jQuery(function ($) {
 			} else {
                 var todo = this.todos[this.indexFromEl(el)];
 				todo.title = val;
-                this.updateTodo(todo.id, {title: val});
+                Model.Todo.update(todo.id, {title: val});
 			}
 
 			this.render();
@@ -225,7 +201,7 @@ jQuery(function ($) {
 		destroy: function (e) {
             var index = this.indexFromEl(e.target);
             var todo = this.todos[index];
-            this.deleteTodo(todo.id);
+            Model.Todo.delete(todo.id);
 			this.todos.splice(this.indexFromEl(e.target), 1);
 			this.render();
 		}
