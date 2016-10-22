@@ -2,3 +2,5 @@
 *.pyc
 *#
 changes.diff
+data/
+flask-todo/instance/*
