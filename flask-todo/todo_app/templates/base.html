@@ -11,12 +11,22 @@
         <link href="//cdn.muicss.com/mui-latest/css/mui.min.css" rel="stylesheet" type="text/css" />
         <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet" type="text/css" />
         <link href="{{ url_for('static', filename='custom.css') }}" rel="stylesheet" type="text/css" />
-        <script src="//cdn.muicss.com/mui-latest/js/mui.min.js"></script>
-        <script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
-        <script src="{{ url_for('static', filename='script.js') }}"></script>
-        <script src="{{ url_for('static', filename='custom.js') }}"></script>
+
+        {% block head %}
+        {% endblock %}
     </head>
     <body>
         {% block body %}{% endblock %}
+
+        <script src="//cdn.muicss.com/mui-latest/js/mui.min.js"></script>
+        <script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script src="{{ url_for('static', filename='underscore-min.js') }}"></script>
+        <script src="{{ url_for('static', filename='behavior.js') }}"></script>
+        <script src="{{ url_for('static', filename='formfill.js') }}"></script>
+        <script src="{{ url_for('static', filename='script.js') }}"></script>
+        <script src="{{ url_for('static', filename='custom.js') }}"></script>
+
+        {% block foot %}
+        {% endblock %}
     </body>
 </html>

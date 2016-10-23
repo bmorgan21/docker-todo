@@ -1,4 +1,5 @@
 from flask import request
+from flask_login import login_required, current_user
 from flask_restplus import Namespace, Resource, fields
 
 from todo_app.services import todo as todo_svc
@@ -17,18 +18,24 @@ todo = ns.model('Todo', {
 @ns.route('/')
 class TodoList(Resource):
     '''Shows a list of all todos, and lets you POST to add new tasks'''
+    @login_required
     @ns.doc('list_todos')
     @ns.marshal_list_with(todo)
     def get(self):
         '''List all tasks'''
         return todo_svc.get_all()
 
+    @login_required
     @ns.doc('create_todo')
     @ns.expect(todo)
     @ns.marshal_with(todo, code=201)
     def post(self):
         '''Create a new task'''
-        todo = todo_svc.create_from_dict(request.json)
+
+        data = {'title': request.json['title'],
+                'completed': request.json['completed'],
+                'user_id': current_user.id}
+        todo = todo_svc.create_from_dict(data)
 
         db.session.commit()
 
@@ -40,12 +47,14 @@ class TodoList(Resource):
 @ns.param('id', 'The task identifier')
 class Todo(Resource):
     '''Show a single todo item and lets you delete them'''
+    @login_required
     @ns.doc('get_todo')
     @ns.marshal_with(todo)
     def get(self, id):
         '''Fetch a given resource'''
         return todo_svc.get(id)
 
+    @login_required
     @ns.doc('delete_todo')
     @ns.response(204, 'Todo deleted')
     def delete(self, id):
@@ -56,6 +65,7 @@ class Todo(Resource):
 
         return '', 204
 
+    @login_required
     @ns.expect(todo)
     @ns.marshal_with(todo)
     def put(self, id):

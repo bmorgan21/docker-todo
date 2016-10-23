@@ -8,10 +8,13 @@
 		<link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
 	</head>
 	<body>
-        {% raw %}
 		<section id="todoapp">
 			<header id="header">
 				<h1>todos</h1>
+                <h4>
+                    {{ current_user.first_name }} {{ current_user.last_name }} |
+                    <a href="{{ url_for('view.auth.logout') }}">Log Out</a>
+                </h4>
 				<input id="new-todo" placeholder="What needs to be done?" autocomplete="off" autofocus>
 			</header>
 			<section id="main">
@@ -26,6 +29,7 @@
 			<p>Created by <a href="http://sindresorhus.com">Sindre Sorhus</a></p>
 			<p>Part of <a href="http://todomvc.com">TodoMVC</a></p>
 		</footer>
+        {% raw %}
 		<script id="todo-template" type="text/x-handlebars-template">
 			{{#this}}
 			<li {{#if completed}}class="completed"{{/if}} data-id="{{id}}">

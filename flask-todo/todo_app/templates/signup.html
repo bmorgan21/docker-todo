@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block body %}
+<div class="page-signup mui-panel">
+    <div class="header">
+        <h1>Sign Up</h1>
+    </div>
+    <form method="POST" data-vars='{{ vars|tojson|safe }}' data-errors='{{ errors|tojson|safe }}'>
+        <div class="mui-textfield mui-textfield--float-label">
+            <input name="first_name" type="text" required>
+            <label>First Name</label>
+        </div>
+        <div class="mui-textfield mui-textfield--float-label">
+            <input name="last_name" type="text" required>
+            <label>Last Name</label>
+        </div>
+        <div class="mui-textfield mui-textfield--float-label">
+            <input name="email" type="email" required>
+            <label>Email</label>
+        </div>
+        <div class="mui-textfield mui-textfield--float-label">
+            <input name="password" type="password" required>
+            <label>Password</label>
+        </div>
+        <button type="submit" class="mui-btn mui-btn--primary mui-btn--raised">Sign Up</button>
+        <a class="login" href="{{ url_for('view.auth.login', next=request.args.get('next')) }}">Already have an account?</a>
+    </form>
+</div>
+{% endblock %}

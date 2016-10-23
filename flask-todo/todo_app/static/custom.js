@@ -10,3 +10,18 @@ function activateModal(elId) {
     // show modal
     mui.overlay('on', modalEl);
 }
+
+Behavior2.Class('formfill', 'form', {
+    reset: {
+        'form': 'reset'
+    }
+}, function($ctx, that) {
+    that.reset = function(evt) {
+        $ctx.find('button[type="submit"]').button('reset');
+        return $ctx.values($ctx.data('vars'));
+    };
+    $ctx.values($ctx.data('vars'));
+    $ctx.errors($ctx.data('errors'));
+    $ctx.data('initialized', true);
+    return $ctx.trigger('initialized');
+});

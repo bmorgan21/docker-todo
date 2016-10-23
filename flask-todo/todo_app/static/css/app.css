@@ -2,3 +2,22 @@
 #footer {
 	display: none;
 }
+
+#todoapp {
+    margin-top:150px;
+}
+
+#todoapp h1 {
+	top: -180px;
+}
+
+#todoapp h4 {
+	position: absolute;
+	top: -60px;
+	width: 100%;
+    font-weight:normal;
+	text-align: center;
+	-webkit-text-rendering: optimizeLegibility;
+	-moz-text-rendering: optimizeLegibility;
+	text-rendering: optimizeLegibility;
+}
