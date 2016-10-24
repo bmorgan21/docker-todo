@@ -1,3 +1,4 @@
+from todo_app import enums
 from todo_app.models import db
 
 __all__ = ['User', 'Role', 'UserRole']
@@ -39,7 +40,7 @@ class User(db.Model):
 
 
 class Role(db.Model):
-    name = db.Column(db.Unicode(16))
+    name = db.Column(db.Enum(enums.Role, 16))
 
     @classmethod
     def get_all_for_user_id(cls, user_id):

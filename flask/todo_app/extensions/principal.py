@@ -1,11 +1,12 @@
 from flask_login import current_user
 from flask_principal import Principal, Permission, RoleNeed, UserNeed, identity_loaded
 
+from todo_app import enums
 from todo_app.services import role as role_svc
 
 principals = Principal()
 
-admin_permission = Permission(RoleNeed('admin'))
+admin_permission = Permission(RoleNeed(enums.Role.ADMIN))
 
 
 @identity_loaded.connect
