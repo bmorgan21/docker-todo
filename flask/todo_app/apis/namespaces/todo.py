@@ -90,4 +90,4 @@ class Todo(Resource):
 
         db.session.commit()
 
-        return todo, 204
+        return todo
