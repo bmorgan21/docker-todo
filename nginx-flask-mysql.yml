@@ -25,7 +25,7 @@ services:
       - "80:80"
 
   web:
-    image: brianmorgan/flask-uwsgi:latest
+    image: brianmorgan/flask:latest
     depends_on:
       - db
     environment:
