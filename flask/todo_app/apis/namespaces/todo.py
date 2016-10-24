@@ -16,6 +16,21 @@ todo = ns.model('Todo', {
 })
 
 
+def transform_data(d):
+    result = {}
+
+    map = {
+        'title': 'name',
+        'completed': 'is_complete'
+    }
+
+    for k, v in d.items():
+        if k in map:
+            result[map[k]] = v
+
+    return result
+
+
 @ns.route('/')
 class TodoList(Resource):
     '''Shows a list of all todos, and lets you POST to add new tasks'''
@@ -33,10 +48,9 @@ class TodoList(Resource):
     def post(self):
         '''Create a new task'''
 
-        data = {'title': request.json['title'],
-                'completed': request.json['completed'],
-                'user_id': current_user.id}
-        todo = todo_svc.create_from_dict(data)
+        data = transform_data(request.json)
+        data['user_id'] = current_user.id
+        todo = todo_svc.create(**data)
 
         db.session.commit()
 
@@ -86,7 +100,7 @@ class Todo(Resource):
         '''Update a task given its identifier'''
         self._get_todo_for_user_id(id, current_user.id)
 
-        todo = todo_svc.update(id, request.json)
+        todo = todo_svc.update(id, transform_data(request.json))
 
         db.session.commit()
 
