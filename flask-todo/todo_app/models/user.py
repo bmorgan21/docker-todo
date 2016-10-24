@@ -9,6 +9,9 @@ class User(db.Model):
     email = db.Column(db.Email, nullable=False, unique=True)
     password = db.Column(db.UnicodeText)
 
+    def __str__(self):
+        return '{} {} ({})'.format(self.first_name, self.last_name, self.email)
+
     ###
     # Properties required by Flask-Login
     ##
