@@ -11,7 +11,7 @@ ns = Namespace('todos', description='TODO operations')
 
 todo = ns.model('Todo', {
     'id': fields.Integer(readOnly=True, description='The task unique identifier'),
-    'title': fields.String(required=True, description='The task details', attribute='name'),
+    'title': fields.String(description='The task details', attribute='name'),
     'completed': fields.Boolean(description='Mark whether the task is complete', attribute='is_complete')
 })
 
