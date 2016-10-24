@@ -26,12 +26,12 @@ RUN set -x \
 
 ## END: GOSU
 
-COPY docker/flask-uwsgi/docker-entrypoint.sh /
+COPY docker-entrypoint.sh /
 
-RUN mkdir ${CODE_DIR} && chown -R uwsgi:uwsgi ${CODE_DIR}
+RUN mkdir ${CODE_DIR} && mkdir ${CODE_DIR}/instance && chown -R uwsgi:uwsgi ${CODE_DIR}
 WORKDIR ${CODE_DIR}
 
-ADD flask-todo/requirements.txt ${CODE_DIR}/requirements.txt
+ADD requirements.txt ${CODE_DIR}/requirements.txt
 
 RUN BUILD_DEPS='gcc python-pip' \
     && apt-get update \
@@ -46,7 +46,7 @@ RUN BUILD_DEPS='gcc python-pip' \
     && apt-get purge -y --auto-remove $BUILD_DEPS \
     && rm -rf /var/lib/apt/lists/*
 
-ADD flask-todo ${CODE_DIR}
+ADD . ${CODE_DIR}
 RUN chown -R uwsgi:uwsgi ${CODE_DIR}
 
 ENTRYPOINT ["/docker-entrypoint.sh"]

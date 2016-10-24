@@ -9,7 +9,7 @@ services:
       MYSQL_USER: web_user
       MYSQL_PASSWORD: password
     volumes:
-      - ../../schema.sql:/docker-entrypoint-initdb.d/schema.sql
+      - ./flask/schema.sql:/docker-entrypoint-initdb.d/schema.sql
       - ~/data/mysql:/var/lib/mysql
 
   nginx:
@@ -39,4 +39,4 @@ services:
       - "8080:5000"
     restart: always
     volumes:
-      - ../../flask-todo:/var/code
+      - ./flask:/var/code
