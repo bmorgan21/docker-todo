@@ -35,6 +35,10 @@ def get_all():
     return todos
 
 
+def get_all_for_user_id(user_id):
+    return Todo.get_all_for_user_id(user_id)
+
+
 def update(id, d):
     todo = get(id)
 

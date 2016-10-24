@@ -1,9 +1,10 @@
-from flask import request
+from flask import request, abort
 from flask_login import login_required, current_user
 from flask_restplus import Namespace, Resource, fields
 
 from todo_app.services import todo as todo_svc
 from todo_app.models import db
+from todo_app.extensions.principal import admin_permission
 
 
 ns = Namespace('todos', description='TODO operations')
@@ -23,7 +24,7 @@ class TodoList(Resource):
     @ns.marshal_list_with(todo)
     def get(self):
         '''List all tasks'''
-        return todo_svc.get_all()
+        return todo_svc.get_all_for_user(current_user.id)
 
     @login_required
     @ns.doc('create_todo')
@@ -46,19 +47,32 @@ class TodoList(Resource):
 @ns.response(404, 'Todo not found')
 @ns.param('id', 'The task identifier')
 class Todo(Resource):
+    def _get_todo_for_user_id(self, id, user_id):
+        todo = todo_svc.get(id)
+
+        if not todo:
+            abort(404)
+
+        if not admin_permission.can() and str(todo.user_id) != current_user.id:
+            abort(403)
+
+        return todo
+
     '''Show a single todo item and lets you delete them'''
     @login_required
     @ns.doc('get_todo')
     @ns.marshal_with(todo)
     def get(self, id):
         '''Fetch a given resource'''
-        return todo_svc.get(id)
+        return self._get_todo_for_user_id(id, current_user.id)
 
     @login_required
     @ns.doc('delete_todo')
     @ns.response(204, 'Todo deleted')
     def delete(self, id):
         '''Delete a task given its identifier'''
+        self._get_todo_for_user_id(id, current_user.id)
+
         todo_svc.delete(id)
 
         db.session.commit()
@@ -70,6 +84,8 @@ class Todo(Resource):
     @ns.marshal_with(todo)
     def put(self, id):
         '''Update a task given its identifier'''
+        self._get_todo_for_user_id(id, current_user.id)
+
         todo = todo_svc.update(id, request.json)
 
         db.session.commit()
