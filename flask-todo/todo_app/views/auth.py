@@ -1,5 +1,6 @@
-from flask import Blueprint, render_template, redirect, request
-from flask_login import login_user, logout_user, login_required, current_user
+from flask import Blueprint, render_template, redirect, request, current_app, session
+from flask_login import login_user, logout_user, current_user
+from flask_principal import identity_changed, Identity, AnonymousIdentity
 
 from todo_app.models import db
 from todo_app.services import user as user_svc
@@ -18,6 +19,8 @@ def login():
 
         if user and user_svc.check_password(user, request.form['password']):
             login_user(user)
+            identity_changed.send(current_app._get_current_object(),
+                                  identity=Identity(user.id))
             return redirect(request.args.get('next', '/'))
         else:
             errors = {'password': 'Invalid email or password'}
@@ -28,7 +31,16 @@ def login():
 @bp.route("/logout")
 def logout():
     logout_user()
-    return redirect('/')
+
+    # Remove session keys set by Flask-Principal
+    for key in ('identity.name', 'identity.auth_type'):
+        session.pop(key, None)
+
+    # Tell Flask-Principal the user is anonymous
+    identity_changed.send(current_app._get_current_object(),
+                          identity=AnonymousIdentity())
+
+    return redirect(request.args.get('next', '/'))
 
 
 @bp.route('/signup', methods=['GET', 'POST'])
@@ -44,6 +56,9 @@ def signup():
         db.session.commit()
 
         login_user(user)
+        identity_changed.send(current_app._get_current_object(),
+                              identity=Identity(user.id))
+
         return redirect(request.args.get('next', '/'))
 
     return render_template('signup.html', vars=request.form, errors=errors)

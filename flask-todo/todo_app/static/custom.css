@@ -31,46 +31,26 @@
     padding: 10px;
 }
 
-.header {
+.modal .header {
     background-color: #78909C;
     color:white;
     padding:15px;
     margin:-15px -15px 15px -15px;
 }
 
-.header h1 {
+.modal .header h1 {
     margin:0;
 }
 
-
-/* Login */
-.page-login {
-    max-width: 370px;
-    margin: 15px auto;
+.modal .actions a {
+    float: right;
+    line-height: 48px;
 }
 
-.page-login .signup {
-    margin-left:50px;
-}
 
-.page-login .forgot-password {
+.modal.login .forgot-password {
     border-top: 1px solid #ccc;
     margin-top:10px;
     padding-top:10px;
     text-align:center;
 }
-
-/* End Login */
-
-/* Sign Up */
-.page-signup {
-    max-width: 370px;
-    margin: 15px auto;
-}
-
-.page-signup .login {
-    margin-left:50px;
-}
-
-
-/* End Sign Up */

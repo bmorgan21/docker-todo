@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block body %}
+<div class="mui-panel modal {% block modal_class %}{% endblock %}">
+    <div class="header">
+        <h1>{% block header %}{% endblock %}</h1>
+    </div>
+    <div class="content">
+        {% block content %}{% endblock %}
+    </div>
+</div>
+{% endblock %}

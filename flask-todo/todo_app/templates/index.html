@@ -13,6 +13,7 @@
 				<h1>todos</h1>
                 <h4>
                     {{ current_user.first_name }} {{ current_user.last_name }} |
+                    {% if current_user_is_admin %}<a href="{{ url_for('view.admin.index') }}">Admin</a> | {% endif %}
                     <a href="{{ url_for('view.auth.logout') }}">Log Out</a>
                 </h4>
 				<input id="new-todo" placeholder="What needs to be done?" autocomplete="off" autofocus>

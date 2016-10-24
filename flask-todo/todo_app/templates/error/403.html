@@ -1,0 +1,13 @@
+{% extends 'inline_modal.html' %}
+
+{% block title %}Forbidden{% endblock %}
+{% block header %}Forbidden{% endblock %}
+{% block content %}
+<div>
+    You don't have permission to access the requested URL.
+</div>
+<br/><br/><br/><br/><br/><br/>
+<center>
+    <a href="{{ url_for('view.todo.index') }}" class="mui-btn mui-btn--primary">Get Me Out of Here!</a>
+</center>
+{% endblock %}

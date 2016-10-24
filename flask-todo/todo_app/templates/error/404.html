@@ -1,0 +1,13 @@
+{% extends 'inline_modal.html' %}
+
+{% block title %}Not Found{% endblock %}
+{% block header %}Not Found{% endblock %}
+{% block content %}
+<div>
+    The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
+</div>
+<br/><br/><br/><br/>
+<center>
+    <a href="{{ url_for('view.todo.index') }}" class="mui-btn mui-btn--primary">Get Me Out of Here!</a>
+</center>
+{% endblock %}

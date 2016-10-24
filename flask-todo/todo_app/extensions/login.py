@@ -1,4 +1,3 @@
-from flask import request
 from flask_login import LoginManager
 
 from todo_app.services import user as user_svc

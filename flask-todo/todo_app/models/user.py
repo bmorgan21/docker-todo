@@ -38,6 +38,14 @@ class User(db.Model):
 class Role(db.Model):
     name = db.Column(db.Unicode(16))
 
+    @classmethod
+    def get_all_for_user_id(cls, user_id):
+        q = cls.query \
+               .join((UserRole, cls.id == UserRole.role_id)) \
+               .filter(UserRole.user_id == user_id)
+
+        return q.all()
+
 
 class UserRole(db.Model):
     __table_args__ = (
