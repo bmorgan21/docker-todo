@@ -24,7 +24,7 @@ class TodoList(Resource):
     @ns.marshal_list_with(todo)
     def get(self):
         '''List all tasks'''
-        return todo_svc.get_all_for_user(current_user.id)
+        return todo_svc.get_all_for_user_id(current_user.id)
 
     @login_required
     @ns.doc('create_todo')

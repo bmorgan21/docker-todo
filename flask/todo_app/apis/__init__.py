@@ -3,7 +3,8 @@ from flask_restplus import Api
 
 bp = Blueprint('api', __name__)
 api = Api(bp, title='Todo API',
-          doc='/doc/')
+          doc='/doc/',
+          validate=True)
 
 ###
 # Register namespaces
