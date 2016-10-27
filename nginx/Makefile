@@ -34,8 +34,11 @@ rm:
 
 release: build
 	make push -e VERSION=$(VERSION)
+	docker tag $(NS)/$(REPO):latest $(NS)/$(REPO):$(MAJOR)
 	make push -e VERSION=$(MAJOR)
+	docker tag $(NS)/$(REPO):latest $(NS)/$(REPO):$(MAJOR).$(MINOR)
 	make push -e VERSION=$(MAJOR).$(MINOR)
+	docker tag $(NS)/$(REPO):latest $(NS)/$(REPO):$(MAJOR).$(MINOR).$(PATCH)
 	make push -e VERSION=$(MAJOR).$(MINOR).$(PATCH)
 
 default: build
