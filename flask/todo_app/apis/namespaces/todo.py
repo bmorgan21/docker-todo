@@ -67,7 +67,7 @@ class Todo(Resource):
         if not todo:
             abort(404)
 
-        if not admin_permission.can() and str(todo.user_id) != current_user.id:
+        if not admin_permission.can() and todo.user_id != current_user.id:
             abort(403)
 
         return todo

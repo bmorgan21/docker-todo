@@ -73,10 +73,16 @@ if [ "$1" = 'uwsgi' -a "$(id -u)" = '0' ]; then
     if [ ! -f $SETTINGS_CFG_FILE ]; then
 		echo 'Flask uwsgi creating settings.cfg file'
 
+        if [ -z "$MAIL_SERVER" ]; then
+            MAIL_SERVER = 'localhost'
+        fi
+
 		cat <<- EOF > "$SETTINGS_CFG_FILE"
 TEMPLATES_AUTO_RELOAD = True
 
 SQLALCHEMY_DATABASE_URI = 'mysql://$MYSQL_USER:$MYSQL_PASSWORD@db:3306/$MYSQL_DATABASE'
+
+MAIL_SERVER = '$MAIL_SERVER'
 
 EOF
 

@@ -3,7 +3,7 @@ from flask_admin import Admin, AdminIndexView
 from flask_admin.contrib.sqla import ModelView
 from flask_login import current_user
 
-from todo_app.models import db, Role, Todo, User, UserRole
+from todo_app.models import db, Role, Todo, User
 
 
 class AuthView:
@@ -27,4 +27,3 @@ admin = Admin(index_view=MyAdminIndexView(), template_mode='bootstrap3')
 admin.add_view(MyModelView(Role, db.session))
 admin.add_view(MyModelView(Todo, db.session))
 admin.add_view(MyModelView(User, db.session))
-admin.add_view(MyModelView(UserRole, db.session))

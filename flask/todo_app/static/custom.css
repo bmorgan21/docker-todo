@@ -47,10 +47,10 @@
     line-height: 48px;
 }
 
-
-.modal.login .forgot-password {
+.modal .footer {
     border-top: 1px solid #ccc;
     margin-top:10px;
     padding-top:10px;
     text-align:center;
 }
+

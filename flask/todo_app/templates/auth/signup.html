@@ -1,5 +1,6 @@
 {% extends 'inline_modal.html' %}
 {% block modal_class %}signup{% endblock %}
+{% block title %}Sign Up{% endblock %}
 {% block header %}Sign Up{% endblock %}
 {% block content %}
 <form method="POST" data-vars='{{ vars|tojson|safe }}' data-errors='{{ errors|tojson|safe }}'>

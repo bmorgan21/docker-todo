@@ -1,5 +1,6 @@
 {% extends 'inline_modal.html' %}
 {% block modal_class %}login{% endblock %}
+{% block title %}Login{% endblock %}
 {% block header %}Login{% endblock %}
 {% block content %}
 <form method="POST" data-vars='{{ vars|tojson|safe }}' data-errors='{{ errors|tojson|safe }}'>
@@ -15,8 +16,8 @@
         <a href="{{ url_for('view.auth.signup', next=request.args.get('next')) }}">Don't have an account?</a>
         <button type="submit" class="mui-btn mui-btn--primary mui-btn--raised">Login</button>
     </div>
-    <div class="forgot-password">
-        <a class="" href="#">Forgot Password?</a>
+    <div class="footer">
+        <a class="" href="{{ url_for('view.auth.forgot_password', next=request.args.get('next')) }}">Forgot Password?</a>
     </div>
 </form>
 {% endblock %}

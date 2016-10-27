@@ -9,3 +9,4 @@ Flask-Login==0.3.2
 Flask-Principal==0.4.0
 py-bcrypt==0.4
 Flask-Admin==1.4.2
+Flask-Mail==0.9.1

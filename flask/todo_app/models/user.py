@@ -1,7 +1,7 @@
 from todo_app import enums
 from todo_app.models import db
 
-__all__ = ['User', 'Role', 'UserRole']
+__all__ = ['User', 'Role']
 
 
 class User(db.Model):
@@ -9,6 +9,8 @@ class User(db.Model):
     last_name = db.Column(db.Unicode(16))
     email = db.Column(db.Email, nullable=False, unique=True)
     password = db.Column(db.UnicodeText)
+    temp_password = db.Column(db.UnicodeText)
+    password_expires = db.Column(db.DateTime)
 
     def __str__(self):
         return '{} {} ({})'.format(self.first_name, self.last_name, self.email)
@@ -40,23 +42,12 @@ class User(db.Model):
 
 
 class Role(db.Model):
+    user_id = db.Column(db.ObjectID, db.ForeignKey('user.id'), nullable=False)
     name = db.Column(db.Enum(enums.Role, 16))
 
     @classmethod
     def get_all_for_user_id(cls, user_id):
         q = cls.query \
-               .join((UserRole, cls.id == UserRole.role_id)) \
-               .filter(UserRole.user_id == user_id)
+               .filter(cls.user_id == user_id)
 
         return q.all()
-
-
-class UserRole(db.Model):
-    __table_args__ = (
-        db.PrimaryKeyConstraint('user_id', 'role_id'),
-    )
-
-    id = None
-
-    user_id = db.Column(db.ObjectID, db.ForeignKey('user.id'), nullable=False)
-    role_id = db.Column(db.ObjectID, db.ForeignKey('role.id'), nullable=False)
