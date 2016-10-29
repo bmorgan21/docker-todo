@@ -44,6 +44,10 @@
 
 .modal .actions a {
     float: right;
+}
+
+.modal .actions a.link {
+    float: right;
     line-height: 48px;
 }
 

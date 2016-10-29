@@ -13,7 +13,7 @@
         <label>Password</label>
     </div>
     <div class="actions">
-        <a href="{{ url_for('view.auth.signup', next=request.args.get('next')) }}">Don't have an account?</a>
+        <a class="link" href="{{ url_for('view.auth.signup', next=request.args.get('next')) }}">Don't have an account?</a>
         <button type="submit" class="mui-btn mui-btn--primary mui-btn--raised">Login</button>
     </div>
     <div class="footer">

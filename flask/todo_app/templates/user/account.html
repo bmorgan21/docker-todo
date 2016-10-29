@@ -1,7 +1,7 @@
 {% extends 'inline_modal.html' %}
-{% block modal_class %}signup{% endblock %}
-{% block title %}Sign Up{% endblock %}
-{% block header %}Sign Up{% endblock %}
+{% block modal_class %}Account{% endblock %}
+{% block title %}Account{% endblock %}
+{% block header %}Account{% endblock %}
 {% block content %}
 <form method="POST" data-vars='{{ vars|tojson|safe }}' data-errors='{{ errors|tojson|safe }}'>
     <div class="mui-textfield mui-textfield--float-label">
@@ -16,13 +16,9 @@
         <input name="email" type="email" required>
         <label>Email</label>
     </div>
-    <div class="mui-textfield mui-textfield--float-label">
-        <input name="password" type="password" required>
-        <label>Password</label>
-    </div>
     <div class="actions">
-        <a class="link" href="{{ url_for('view.auth.login', next=request.args.get('next')) }}">Already have an account?</a>
-        <button type="submit" class="mui-btn mui-btn--primary mui-btn--raised">Sign Up</button>
+        <a href="/" class="mui-btn">Cancel</a>
+        <button type="submit" class="mui-btn mui-btn--primary mui-btn--raised">Update</button>
     </div>
 </form>
 {% endblock %}

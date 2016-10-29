@@ -8,8 +8,8 @@ from todo_app.services import user as user_svc
 bp = Blueprint('view.user', __name__)
 
 
-@login_required
 @bp.route('/change-password', methods=['GET', 'POST'])
+@login_required
 def change_password():
     user = user_svc.get(current_user.id)
 
@@ -28,3 +28,30 @@ def change_password():
             return redirect(request.args.get('next', '/'))
 
     return render_template('user/change_password.html', vars=request.form, errors=errors)
+
+
+@bp.route('/account', methods=['GET', 'POST'])
+@login_required
+def account():
+    errors = {}
+    if request.method == 'POST':
+        vars = request.form
+
+        user_svc.update(current_user.id,
+                        {'first_name': request.form['first_name'],
+                         'last_name': request.form['last_name'],
+                         'email': request.form['email']})
+
+        db.session.commit()
+
+        return redirect(request.args.get('next', '/'))
+    else:
+        user = user_svc.get(current_user.id)
+
+        vars = {
+            'first_name': user.first_name,
+            'last_name': user.last_name,
+            'email': user.email
+        }
+
+    return render_template('user/account.html', vars=vars, errors=errors)

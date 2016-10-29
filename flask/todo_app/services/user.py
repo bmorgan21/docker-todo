@@ -57,6 +57,15 @@ def create(email, password, first_name=None, last_name=None):
     return user
 
 
+def update(id, d):
+    user = get(id)
+
+    for k, v in d.items():
+        setattr(user, k, v)
+
+    return user
+
+
 def send_reset_password(email):
     user = get_by_email(email)
     if user:
