@@ -74,7 +74,7 @@ if [ "$1" = 'uwsgi' -a "$(id -u)" = '0' ]; then
 		echo 'Flask uwsgi creating settings.cfg file'
 
         if [ -z "$MAIL_SERVER" ]; then
-            MAIL_SERVER = 'localhost'
+            MAIL_SERVER='localhost'
         fi
 
 		cat <<- EOF > "$SETTINGS_CFG_FILE"
