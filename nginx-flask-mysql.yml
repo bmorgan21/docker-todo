@@ -37,8 +37,6 @@ services:
       MYSQL_USER: web_user
       MYSQL_PASSWORD: password
       MAIL_SERVER: postfix
-    ports:
-      - "8080:5000"
     restart: always
     volumes:
       - ./flask:/var/code
