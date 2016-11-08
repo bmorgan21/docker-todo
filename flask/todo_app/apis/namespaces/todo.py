@@ -2,7 +2,7 @@ from flask import request, abort
 from flask_login import login_required, current_user
 from flask_restplus import Namespace, Resource, fields
 
-from todo_app.services import todo as todo_svc
+from todo_app.services import TodoService
 from todo_app.models import db
 from todo_app.extensions.principal import admin_permission
 
@@ -39,7 +39,7 @@ class TodoList(Resource):
     @ns.marshal_list_with(todo)
     def get(self):
         '''List all tasks'''
-        return todo_svc.get_all_for_user_id(current_user.id)
+        return TodoService.get_many(user_id=current_user.id)
 
     @login_required
     @ns.doc('create_todo')
@@ -50,8 +50,9 @@ class TodoList(Resource):
 
         data = transform_data(request.json)
         data['user_id'] = current_user.id
-        todo = todo_svc.create(**data)
+        todo = TodoService.create(**data)
 
+        db.session.add(todo)
         db.session.commit()
 
         return todo, 201
@@ -62,10 +63,7 @@ class TodoList(Resource):
 @ns.param('id', 'The task identifier')
 class Todo(Resource):
     def _get_todo_for_user_id(self, id, user_id):
-        todo = todo_svc.get(id)
-
-        if not todo:
-            abort(404)
+        todo = TodoService.get(id)
 
         if not admin_permission.can() and todo.user_id != current_user.id:
             abort(403)
@@ -87,7 +85,7 @@ class Todo(Resource):
         '''Delete a task given its identifier'''
         self._get_todo_for_user_id(id, current_user.id)
 
-        todo_svc.delete(id)
+        TodoService.delete(id)
 
         db.session.commit()
 
@@ -100,7 +98,7 @@ class Todo(Resource):
         '''Update a task given its identifier'''
         self._get_todo_for_user_id(id, current_user.id)
 
-        todo = todo_svc.update(id, transform_data(request.json))
+        todo = TodoService.update(id, transform_data(request.json))
 
         db.session.commit()
 

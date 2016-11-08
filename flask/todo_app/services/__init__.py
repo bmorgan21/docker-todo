@@ -1,3 +1,8 @@
+from todo_app.managers import (
+    TodoManager
+)
+
+
 class ProxyManager(type):
     def __getattr__(cls, key):
         if cls.__manager__:
@@ -8,6 +13,10 @@ class ProxyManager(type):
 class Service:
     __metaclass__ = ProxyManager
     __manager__ = None
+
+
+class TodoService(Service):
+    __manager__ = TodoManager
 
 
 from user import UserService  # noqa

@@ -1,12 +1,22 @@
 class ModelManager(object):
     __model__ = None
 
+    @staticmethod
+    def _apply_limit_offset(q, limit, offset):
+        if offset is not None:
+            q = q.offset(offset)
+
+        if limit is not None:
+            q = q.limit(limit)
+
     @classmethod
     def create(cls, **kwargs):
         return cls.__model__(**kwargs)
 
     @classmethod
     def get(cls, *args, **kwargs):
+        raise_not_found = kwargs.pop('raise_not_found', True)
+
         q = cls.__model__.query
         if len(args) == 1:
             q = q.filter(cls.__model__.id == args[0])
@@ -14,19 +24,17 @@ class ModelManager(object):
         for k, v in kwargs.items():
             q = q.filter(getattr(cls.__model__, k) == v)
 
-        return q.one()
+        if raise_not_found:
+            return q.one()
+        return q.first()
 
     @classmethod
     def get_many(cls, offset=None, limit=None, **kwargs):
         q = cls.__model__.query
         for k, v in kwargs.items():
-            q.filter(getattr(cls.__model__, k) == v)
+            q = q.filter(getattr(cls.__model__, k) == v)
 
-        if offset is not None:
-            q = q.offset(offset)
-
-        if limit is not None:
-            q = q.limit(limit)
+        cls._apply_limit_offset(q, limit, offset)
 
         return q.all()
 
@@ -51,10 +59,15 @@ class ModelManager(object):
         return obj
 
 
-from checkout.models import (
+from todo_app.models import (
     Role,
+    Todo,
     User
 )
+
+
+class TodoManager(ModelManager):
+    __model__ = Todo
 
 
 class UserManager(ModelManager):

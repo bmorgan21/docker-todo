@@ -1,8 +1,8 @@
 from datetime import datetime, timedelta
 from random import choice
 
-from checkout.services import Service, email as email_svc
-from checkout.managers import UserManager
+from todo_app.services import Service, email as email_svc
+from todo_app.managers import UserManager
 
 import bcrypt
 
@@ -47,20 +47,13 @@ class UserService(Service):
 
     @classmethod
     def create(cls, email, password, first_name=None, last_name=None):
-        user = UserService.create(first_name=first_name, last_name=last_name, email=email, confirm_personal_data=True)
+        user = cls.__manager__.create(first_name=first_name, last_name=last_name, email=email)
         cls.set_password(user, password)
         return user
 
     @classmethod
-    def update(cls, id, d):
-        user = Service.update(id, d)
-        user.confirm_personal_data = False
-
-        return user
-
-    @classmethod
     def send_reset_password(cls, email):
-        user = UserService.get(email=email)
+        user = cls.get(email=email, raise_not_found=False)
         if user:
             # give them a new password they can use to login with
             password = cls._mkpassword()
