@@ -1,4 +1,27 @@
 class ModelManager(object):
+
+    @classmethod
+    def create(cls, **kwargs):
+        raise NotImplementedError()
+
+    @classmethod
+    def get(cls, *args, **kwargs):
+        raise NotImplementedError()
+
+    @classmethod
+    def get_many(cls, offset=None, limit=None, **kwargs):
+        raise NotImplementedError()
+
+    @classmethod
+    def delete(cls, id):
+        raise NotImplementedError()
+
+    @classmethod
+    def update(cls, id, d):
+        raise NotImplementedError()
+
+
+class SqlAlchemyModelManager(ModelManager):
     __model__ = None
 
     @staticmethod
@@ -8,6 +31,8 @@ class ModelManager(object):
 
         if limit is not None:
             q = q.limit(limit)
+
+        return q
 
     @classmethod
     def create(cls, **kwargs):
@@ -66,17 +91,21 @@ from todo_app.models import (
 )
 
 
-class TodoManager(ModelManager):
+class TodoManager(SqlAlchemyModelManager):
     __model__ = Todo
 
 
-class UserManager(ModelManager):
+class UserManager(SqlAlchemyModelManager):
     __model__ = User
 
     @staticmethod
     def add_role(user_id, name):
-        return Role(user_id=user_id, name=name)
+        return RoleManager.create(user_id=user_id, name=name)
 
     @staticmethod
     def get_roles(user_id):
-        return Role.query.filter(Role.user_id == user_id).all()
+        return RoleManager.get_many(user_id=user_id)
+
+
+class RoleManager(SqlAlchemyModelManager):
+    __model__ = Role
