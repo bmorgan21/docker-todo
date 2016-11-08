@@ -13,11 +13,11 @@ class ModelManager(object):
         raise NotImplementedError()
 
     @classmethod
-    def delete(cls, id):
+    def delete(cls, id_):
         raise NotImplementedError()
 
     @classmethod
-    def update(cls, id, d):
+    def update(cls, id_, d):
         raise NotImplementedError()
 
 
@@ -44,7 +44,7 @@ class SqlAlchemyModelManager(ModelManager):
 
         q = cls.__model__.query
         if len(args) == 1:
-            q = q.filter(cls.__model__.id == args[0])
+            q = q.filter(cls.__model__.id_ == args[0])
 
         for k, v in kwargs.items():
             q = q.filter(getattr(cls.__model__, k) == v)
@@ -64,19 +64,19 @@ class SqlAlchemyModelManager(ModelManager):
         return q.all()
 
     @classmethod
-    def delete(cls, id):
+    def delete(cls, id_):
         # first make sure it exists, before we delete it
-        if not isinstance(id, cls.__model__):
-            cls.get(id)
+        if not isinstance(id_, cls.__model__):
+            cls.get(id_)
 
-        cls.__model__.query.filter(cls.__model__.id == id).delete()
+        cls.__model__.query.filter(cls.__model__.id_ == id_).delete()
 
     @classmethod
-    def update(cls, id, d):
-        if isinstance(id, cls.__model__):
-            obj = id
+    def update(cls, id_, d):
+        if isinstance(id_, cls.__model__):
+            obj = id_
         else:
-            obj = cls.get(id)
+            obj = cls.get(id_)
 
         for k, v in d.items():
             setattr(obj, k, v)
