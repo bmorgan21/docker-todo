@@ -3,7 +3,7 @@ from flask_login import login_user, logout_user, current_user
 from flask_principal import identity_changed, Identity, AnonymousIdentity
 
 from todo_app.models import db
-from todo_app.services import user as user_svc
+from todo_app.services import UserService
 
 bp = Blueprint('view.auth', __name__)
 
@@ -15,17 +15,17 @@ def login():
 
     errors = {}
     if request.method == 'POST':
-        user = user_svc.get_by_email(request.form['email'])
+        user = UserService.get(email=request.form['email'], raise_not_found=False)
 
         if user:
-            if user_svc.check_password(user.password, request.form['password']):
+            if UserService.check_password(user.password, request.form['password']):
                 login_user(user)
                 identity_changed.send(current_app._get_current_object(),
                                       identity=Identity(user.id))
                 return redirect(request.args.get('next', '/'))
-            elif user_svc.check_password(user.temp_password, request.form['password']):
+            elif UserService.check_password(user.temp_password, request.form['password']):
                 # these are only good once
-                user_svc.set_password(user, None, attr='temp_password')
+                UserService.set_password(user, None, attr='temp_password')
                 login_user(user)
                 identity_changed.send(current_app._get_current_object(),
                                       identity=Identity(user.id))
@@ -62,9 +62,10 @@ def signup():
 
     errors = {}
     if request.method == 'POST':
-        user = user_svc.create(request.form['email'], request.form['password'],
-                               first_name=request.form['first_name'], last_name=request.form['last_name'])
+        user = UserService.create(request.form['email'], request.form['password'],
+                                  first_name=request.form['first_name'], last_name=request.form['last_name'])
 
+        db.session.add(user)
         db.session.commit()
 
         login_user(user)
@@ -83,7 +84,7 @@ def forgot_password():
 
     errors = {}
     if request.method == 'POST':
-        user = user_svc.send_reset_password(request.form['email'])
+        user = UserService.send_reset_password(request.form['email'])
 
         if not user:
             errors['email'] = 'Email not found.'

@@ -2,7 +2,7 @@ from flask_login import current_user
 from flask_principal import Principal, Permission, RoleNeed, UserNeed, identity_loaded
 
 from todo_app import enums
-from todo_app.services import role as role_svc
+from todo_app.services import UserService
 
 principals = Principal()
 
@@ -18,6 +18,6 @@ def on_identity_loaded(sender, identity):
     if hasattr(current_user, 'id'):
         identity.provides.add(UserNeed(current_user.id))
 
-        roles = role_svc.get_all_for_user_id(current_user.id)
+        roles = UserService.get_roles(current_user.id)
         for role in roles:
             identity.provides.add(RoleNeed(role.name))
