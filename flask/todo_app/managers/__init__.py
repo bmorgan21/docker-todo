@@ -35,6 +35,16 @@ class SqlAlchemyModelManager(ModelManager):
         return q
 
     @classmethod
+    def _apply_contraints(cls, q, **kwargs):
+        for k, v in kwargs.items():
+            if isinstance(v, (list, tuple)):
+                q = q.filter(getattr(cls.__model__, k).in_(v))
+            else:
+                q = q.filter(getattr(cls.__model__, k) == v)
+
+        return q
+
+    @classmethod
     def create(cls, **kwargs):
         return cls.__model__(**kwargs)
 
@@ -46,8 +56,7 @@ class SqlAlchemyModelManager(ModelManager):
         if len(args) == 1:
             q = q.filter(cls.__model__.id_ == args[0])
 
-        for k, v in kwargs.items():
-            q = q.filter(getattr(cls.__model__, k) == v)
+        q = cls._apply_contraints(q, **kwargs)
 
         if raise_not_found:
             return q.one()
@@ -56,8 +65,8 @@ class SqlAlchemyModelManager(ModelManager):
     @classmethod
     def get_many(cls, offset=None, limit=None, **kwargs):
         q = cls.__model__.query
-        for k, v in kwargs.items():
-            q = q.filter(getattr(cls.__model__, k) == v)
+
+        q = cls._apply_contraints(q, **kwargs)
 
         cls._apply_limit_offset(q, limit, offset)
 
