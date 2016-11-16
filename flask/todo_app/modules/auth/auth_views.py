@@ -2,8 +2,9 @@ from flask import Blueprint, render_template, redirect, request, current_app, se
 from flask_login import login_user, logout_user, current_user
 from flask_principal import identity_changed, Identity, AnonymousIdentity
 
-from todo_app.models import db
-from todo_app.services import UserService
+from ct_core_api.core.database import db
+
+from app.services.user_service import UserService
 
 bp = Blueprint('view.auth', __name__)
 
@@ -20,15 +21,14 @@ def login():
         if user:
             if UserService.check_password(user.password, request.form['password']):
                 login_user(user)
-                identity_changed.send(current_app._get_current_object(),
-                                      identity=Identity(user.id))
+                identity_changed.send(
+                    current_app._get_current_object(), identity=Identity(user.id))
                 return redirect(request.args.get('next', '/'))
             elif UserService.check_password(user.temp_password, request.form['password']):
                 # these are only good once
                 UserService.set_password(user, None, attr='temp_password')
                 login_user(user)
-                identity_changed.send(current_app._get_current_object(),
-                                      identity=Identity(user.id))
+                identity_changed.send(current_app._get_current_object(), identity=Identity(user.id))
 
                 db.session.commit()
                 return redirect(url_for('view.user.change_password', next=request.args.get('next')))
@@ -49,8 +49,7 @@ def logout():
         session.pop(key, None)
 
     # Tell Flask-Principal the user is anonymous
-    identity_changed.send(current_app._get_current_object(),
-                          identity=AnonymousIdentity())
+    identity_changed.send(current_app._get_current_object(), identity=AnonymousIdentity())
 
     return redirect(request.args.get('next', '/'))
 
@@ -62,15 +61,17 @@ def signup():
 
     errors = {}
     if request.method == 'POST':
-        user = UserService.create(request.form['email'], request.form['password'],
-                                  first_name=request.form['first_name'], last_name=request.form['last_name'])
+        user = UserService.create(
+            request.form['email'],
+            request.form['password'],
+            first_name=request.form['first_name'],
+            last_name=request.form['last_name'])
 
         db.session.add(user)
         db.session.commit()
 
         login_user(user)
-        identity_changed.send(current_app._get_current_object(),
-                              identity=Identity(user.id))
+        identity_changed.send(current_app._get_current_object(), identity=Identity(user.id))
 
         return redirect(request.args.get('next', '/'))
 

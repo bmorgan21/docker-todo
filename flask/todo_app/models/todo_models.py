@@ -1,4 +1,4 @@
-from todo_app.models import db
+from ct_core_api.core.database import db
 
 __all__ = ['Todo']
 

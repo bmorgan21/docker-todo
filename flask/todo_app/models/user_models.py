@@ -1,10 +1,12 @@
-from todo_app import enums
-from todo_app.models import db
+from ct_core_api.core.database import db
+from flask.ext.login import UserMixin
+
+from app import enums
 
 __all__ = ['User', 'Role']
 
 
-class User(db.Model):
+class User(db.Model, UserMixin):
     first_name = db.Column(db.Unicode(16))
     last_name = db.Column(db.Unicode(16))
     email = db.Column(db.Email, nullable=False, unique=True)
@@ -14,27 +16,6 @@ class User(db.Model):
 
     def __str__(self):
         return '{} {} ({})'.format(self.first_name, self.last_name, self.email)
-
-    ###
-    # Properties required by Flask-Login
-    ##
-
-    @property
-    def is_authenticated(self):
-        return True
-
-    @property
-    def is_active(self):
-        return True
-
-    @property
-    def is_anonymous(self):
-        return False
-
-    def get_id(self):
-        return unicode(self.id)
-
-    ###
 
     @classmethod
     def get_by_email(cls, email):
@@ -47,7 +28,4 @@ class Role(db.Model):
 
     @classmethod
     def get_all_for_user_id(cls, user_id):
-        q = cls.query \
-               .filter(cls.user_id == user_id)
-
-        return q.all()
+        return cls.query.filter_by(user_id=user_id).all()

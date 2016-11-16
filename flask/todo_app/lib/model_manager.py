@@ -1,5 +1,5 @@
+# TODO: Consider moving this into `ct-core-db`
 class ModelManager(object):
-
     @classmethod
     def create(cls, **kwargs):
         raise NotImplementedError()
@@ -91,30 +91,3 @@ class SqlAlchemyModelManager(ModelManager):
             setattr(obj, k, v)
 
         return obj
-
-
-from todo_app.models import (
-    Role,
-    Todo,
-    User
-)
-
-
-class TodoManager(SqlAlchemyModelManager):
-    __model__ = Todo
-
-
-class UserManager(SqlAlchemyModelManager):
-    __model__ = User
-
-    @staticmethod
-    def add_role(user_id, name):
-        return RoleManager.create(user_id=user_id, name=name)
-
-    @staticmethod
-    def get_roles(user_id):
-        return RoleManager.get_many(user_id=user_id)
-
-
-class RoleManager(SqlAlchemyModelManager):
-    __model__ = Role

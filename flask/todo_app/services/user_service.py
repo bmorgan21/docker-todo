@@ -1,12 +1,29 @@
 from datetime import datetime, timedelta
 from random import choice
 
-from todo_app.services import Service, email as email_svc
-from todo_app.managers import UserManager
-
 import bcrypt
 
+from app import models as m
+from app.lib.model_manager import SqlAlchemyModelManager
+from app.services import Service
+
 __all__ = ['UserService']
+
+
+class RoleManager(SqlAlchemyModelManager):
+    __model__ = m.Role
+
+
+class UserManager(SqlAlchemyModelManager):
+    __model__ = m.User
+
+    @staticmethod
+    def add_role(user_id, name):
+        return RoleManager.create(user_id=user_id, name=name)
+
+    @staticmethod
+    def get_roles(user_id):
+        return RoleManager.get_many(user_id=user_id)
 
 
 charsets = [
@@ -26,7 +43,7 @@ class UserService(Service):
         charset = choice(charsets)
         while len(pwd) < length:
             pwd.append(choice(charset))
-            charset = choice(list(set(charsets) - set([charset])))
+            charset = choice(list(set(charsets) - {charset}))
         return "".join(pwd)
 
     @staticmethod
@@ -53,11 +70,12 @@ class UserService(Service):
 
     @classmethod
     def send_reset_password(cls, email):
+        from app.services import email_service
         user = cls.get(email=email, raise_not_found=False)
         if user:
             # give them a new password they can use to login with
             password = cls._mkpassword()
             cls.set_password(user, password, attr='temp_password')
-            email_svc.send_reset_password(user, password)
+            email_service.send_reset_password(user, password)
 
         return user

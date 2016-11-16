@@ -1,8 +1,9 @@
 from flask import Blueprint, render_template, redirect, request
 from flask_login import login_required, current_user
 
-from todo_app.models import db
-from todo_app.services import UserService
+from ct_core_api.core.database import db
+
+from app.services.user_service import UserService
 
 bp = Blueprint('view.user', __name__)
 
@@ -34,12 +35,12 @@ def change_password():
 def account():
     errors = {}
     if request.method == 'POST':
-        vars = request.form
+        form_vars = request.form
 
-        UserService.update(current_user.id,
-                           {'first_name': request.form['first_name'],
-                            'last_name': request.form['last_name'],
-                            'email': request.form['email']})
+        UserService.update(current_user.id, {
+            'first_name': request.form['first_name'],
+            'last_name': request.form['last_name'],
+            'email': request.form['email']})
 
         db.session.commit()
 
@@ -47,10 +48,10 @@ def account():
     else:
         user = UserService.get(current_user.id)
 
-        vars = {
+        form_vars = {
             'first_name': user.first_name,
             'last_name': user.last_name,
             'email': user.email
         }
 
-    return render_template('user/account.html', vars=vars, errors=errors)
+    return render_template('user/account.html', vars=form_vars, errors=errors)

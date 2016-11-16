@@ -1,11 +1,23 @@
+import logging
+
+from ct_core_api.api.core.namespace import APINamespace
+from ct_core_api.api.core.resource import APIResource
+
+from app.services.todo_service import TodoService
+
+_logger = logging.getLogger(__name__)
+
+api = APINamespace('todos', description="TODOs")
+
+
+@api.route('/')
+class TodoCollectionResource(APIResource):
+    pass
+
+# FIXME: Convert
 from flask import request, abort
 from flask_login import login_required, current_user
 from flask_restplus import Namespace, Resource, fields
-
-from todo_app.services import TodoService
-from todo_app.models import db
-from todo_app.extensions.principal import admin_permission
-
 
 ns = Namespace('todos', description='TODO operations')
 
@@ -33,12 +45,12 @@ def transform_data(d):
 
 @ns.route('/')
 class TodoList(Resource):
-    '''Shows a list of all todos, and lets you POST to add new tasks'''
+    """Shows a list of all todos, and lets you POST to add new tasks"""
     @login_required
     @ns.doc('list_todos')
     @ns.marshal_list_with(todo)
     def get(self):
-        '''List all tasks'''
+        """List all tasks"""
         return TodoService.get_many(user_id=current_user.id)
 
     @login_required
@@ -46,7 +58,7 @@ class TodoList(Resource):
     @ns.expect(todo)
     @ns.marshal_with(todo, code=201)
     def post(self):
-        '''Create a new task'''
+        """Create a new task"""
 
         data = transform_data(request.json)
         data['user_id'] = current_user.id
@@ -75,14 +87,14 @@ class Todo(Resource):
     @ns.doc('get_todo')
     @ns.marshal_with(todo)
     def get(self, id):
-        '''Fetch a given resource'''
+        """Fetch a given resource"""
         return self._get_todo_for_user_id(id, current_user.id)
 
     @login_required
     @ns.doc('delete_todo')
     @ns.response(204, 'Todo deleted')
     def delete(self, id):
-        '''Delete a task given its identifier'''
+        """Delete a task given its identifier"""
         self._get_todo_for_user_id(id, current_user.id)
 
         TodoService.delete(id)
@@ -95,7 +107,7 @@ class Todo(Resource):
     @ns.expect(todo)
     @ns.marshal_with(todo)
     def put(self, id):
-        '''Update a task given its identifier'''
+        """Update a task given its identifier"""
         self._get_todo_for_user_id(id, current_user.id)
 
         todo = TodoService.update(id, transform_data(request.json))
