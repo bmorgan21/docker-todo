@@ -1,4 +1,4 @@
-from app.extensions import mail_ext, principal_ext, todo_api_ext
+from todo_app.extensions import mail_ext, principal_ext, todo_api_ext
 
 
 def init_app(app):

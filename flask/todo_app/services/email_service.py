@@ -1,7 +1,7 @@
 from flask import render_template
 from flask_mail import Message
 
-from app.extensions.mail_ext import mail
+from todo_app.extensions.mail_ext import mail
 
 DEFAULT_SENDER = 'Team Todo <help@example.com>'
 

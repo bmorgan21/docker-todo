@@ -3,7 +3,7 @@ import logging
 from ct_core_api.api.core.namespace import APINamespace
 from ct_core_api.api.core.resource import APIResource
 
-from app.services.todo_service import TodoService
+from todo_app.services.todo_service import TodoService
 
 _logger = logging.getLogger(__name__)
 

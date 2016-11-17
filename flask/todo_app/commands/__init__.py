@@ -1,4 +1,4 @@
-from app.commands import shell_cmd
+from todo_app.commands import shell_cmd
 
 
 def init_app(app):

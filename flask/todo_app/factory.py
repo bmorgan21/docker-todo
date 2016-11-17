@@ -8,16 +8,16 @@ def create_app(import_name, *args, **kwargs):
 
     app = create_api_app(import_name, *args, **kwargs)
 
-    from app import logging
+    from todo_app import logging
     logging.init_app(app)
 
-    from app import extensions
+    from todo_app import extensions
     extensions.init_app(app)
 
-    from app import modules
+    from todo_app import modules
     modules.init_app(app)
 
-    from app import commands
+    from todo_app import commands
     commands.init_app(app)
 
     return app

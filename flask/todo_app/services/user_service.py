@@ -3,9 +3,9 @@ from random import choice
 
 import bcrypt
 
-from app import models as m
-from app.lib.model_manager import SqlAlchemyModelManager
-from app.services import Service
+from todo_app import models as m
+from todo_app.lib.model_manager import SqlAlchemyModelManager
+from todo_app.services import Service
 
 __all__ = ['UserService']
 
@@ -70,7 +70,7 @@ class UserService(Service):
 
     @classmethod
     def send_reset_password(cls, email):
-        from app.services import email_service
+        from todo_app.services import email_service
         user = cls.get(email=email, raise_not_found=False)
         if user:
             # give them a new password they can use to login with

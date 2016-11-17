@@ -1,7 +1,7 @@
 from ct_core_api.core.database import db
 from flask.ext.login import UserMixin
 
-from app import enums
+from todo_app import enums
 
 __all__ = ['User', 'Role']
 

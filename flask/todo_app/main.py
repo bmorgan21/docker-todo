@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from app import factory
+from todo_app import factory
 
 app = factory.create_app(__name__)
 
