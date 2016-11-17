@@ -1,5 +1,6 @@
+from flask_login import UserMixin
+
 from ct_core_api.core.database import db
-from flask.ext.login import UserMixin
 
 from app import enums
 
