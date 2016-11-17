@@ -2,6 +2,9 @@ SHELL := /bin/bash
 
 NAME = todo
 
+help:          ## Show this help.
+	@fgrep -h "##" $(MAKEFILE_LIST) | fgrep -v fgrep | sed -e 's/\\$$//' | sed -e 's/##//'
+
 init:
 	echo "version: '2'" > local.yml
 
