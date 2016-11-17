@@ -5,7 +5,7 @@ from flask_login import current_user
 
 from ct_core_api.core.database import db
 
-from todo_app.models import todo_models, user_models
+from app.models import todo_models, user_models
 
 
 class AuthView(object):

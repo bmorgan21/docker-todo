@@ -3,7 +3,7 @@ from flask_login import login_required, current_user
 
 from ct_core_api.core.database import db
 
-from todo_app.services.user_service import UserService
+from app.services.user_service import UserService
 
 bp = Blueprint('view.user', __name__)
 

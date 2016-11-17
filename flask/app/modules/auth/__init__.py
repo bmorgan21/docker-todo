@@ -3,8 +3,8 @@ from flask_principal import Permission, RoleNeed, UserNeed, identity_loaded
 
 from ct_core_api.api.app.extensions.login_manager_ext import login_manager
 
-from todo_app import enums
-from todo_app.services.user_service import UserService
+from app import enums
+from app.services.user_service import UserService
 
 admin_permission = Permission(RoleNeed(enums.Role.ADMIN))
 
@@ -29,6 +29,6 @@ def load_user(id):
 
 
 def init_app(app):
-    from todo_app.modules.auth import auth_views
+    from app.modules.auth import auth_views
     app.register_blueprint(auth_views.bp, url_prefix='/auth')
     login_manager.login_view = 'view.auth.login'

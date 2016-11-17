@@ -1,4 +1,4 @@
-from todo_app.modules import admin, auth, todo, todo_api, user
+from app.modules import admin, auth, todo, todo_api, user
 
 
 def init_app(app):
