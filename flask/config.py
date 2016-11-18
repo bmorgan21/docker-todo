@@ -2,7 +2,7 @@ from ct_core_api.api.app import config
 
 SECRET_KEY = 'We Love Our TODO List'
 
-SQLALCHEMY_DATABASE_URI = 'sqlite://'
+SQLALCHEMY_DATABASE_URI = 'sqlite:///database.db'
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 # TODO: Consider disabling `ct-core-api` auth module by default as it introduces oauth2 libs

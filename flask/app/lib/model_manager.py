@@ -54,7 +54,7 @@ class SqlAlchemyModelManager(ModelManager):
 
         q = cls.__model__.query
         if len(args) == 1:
-            q = q.filter(cls.__model__.id_ == args[0])
+            q = q.filter(cls.__model__.id == args[0])
 
         q = cls._apply_contraints(q, **kwargs)
 
@@ -78,7 +78,7 @@ class SqlAlchemyModelManager(ModelManager):
         if not isinstance(id_, cls.__model__):
             cls.get(id_)
 
-        cls.__model__.query.filter(cls.__model__.id_ == id_).delete()
+        cls.__model__.query.filter(cls.__model__.id == id_).delete()
 
     @classmethod
     def update(cls, id_, d):

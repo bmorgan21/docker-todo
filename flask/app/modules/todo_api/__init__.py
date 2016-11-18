@@ -4,6 +4,7 @@ from app.extensions.todo_api_ext import todo_api
 
 
 def init_app(app):
+    from app.modules.todo_api import error_handlers
     from app.modules.todo_api import todo_resources
     todo_api.add_namespace(todo_resources.api)
 
