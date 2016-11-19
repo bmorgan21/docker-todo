@@ -3,27 +3,10 @@ from random import choice
 
 import bcrypt
 
-from app import models as m
-from app.lib.model_manager import SqlAlchemyModelManager
+from app.managers import UserManager
 from app.services import Service
 
 __all__ = ['UserService']
-
-
-class RoleManager(SqlAlchemyModelManager):
-    __model__ = m.Role
-
-
-class UserManager(SqlAlchemyModelManager):
-    __model__ = m.User
-
-    @staticmethod
-    def add_role(user_id, name):
-        return RoleManager.create(user_id=user_id, name=name)
-
-    @staticmethod
-    def get_roles(user_id):
-        return RoleManager.get_many(user_id=user_id)
 
 
 charsets = [
