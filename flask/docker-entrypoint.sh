@@ -40,7 +40,7 @@ if [ "$1" = 'uwsgi' -a "$(id -u)" = '0' ]; then
     fi
 
     if [ -z "$UWSGI_SERVICE_MODULE" ]; then
-        UWSGI_SERVICE_MODULE=app:app
+        UWSGI_SERVICE_MODULE=app.main:app
     fi
 
     if [ -z "$UWSGI_PROCESSES" ]; then

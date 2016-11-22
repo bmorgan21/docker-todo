@@ -29,20 +29,15 @@ RUN set -x \
 RUN mkdir ${CODE_DIR} && mkdir ${CODE_DIR}/instance && chown -R uwsgi:uwsgi ${CODE_DIR}
 WORKDIR ${CODE_DIR}
 
-ADD requirements.txt ${CODE_DIR}/requirements.txt
-
 RUN BUILD_DEPS='gcc python-pip' \
     && apt-get update \
     && apt-get install -y --no-install-recommends python-dev libmysqlclient-dev $BUILD_DEPS \
     && pip install --upgrade pip \
     && pip install setuptools==28.3.0 \
-    && pip install uwsgi==2.0.14 \
-    && pip install -r requirements.txt \
-    && pip uninstall -y \
-        setuptools \
-        pip \
-    && apt-get purge -y --auto-remove $BUILD_DEPS \
-    && rm -rf /var/lib/apt/lists/*
+    && pip install uwsgi==2.0.14
+
+ADD requirements.txt ${CODE_DIR}/requirements.txt
+RUN pip install -r requirements.txt
 
 ADD . ${CODE_DIR}
 RUN chown -R uwsgi:uwsgi ${CODE_DIR}
