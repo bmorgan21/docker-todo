@@ -1,5 +1,5 @@
 from model_manager import SqlAlchemyModelManager
-from app.models.todo_models import (
+from app.models import (
     Role,
     Todo,
     User
