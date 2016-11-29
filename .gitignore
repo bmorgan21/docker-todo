@@ -5,3 +5,4 @@ changes.diff
 data/
 flask-todo/instance/*
 local.yml
+tmp

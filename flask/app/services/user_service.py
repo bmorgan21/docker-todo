@@ -43,7 +43,7 @@ class UserService(Service):
 
     @staticmethod
     def check_password(password, plain_text_password):
-        return password and plain_text_password and bcrypt.checkpw(plain_text_password, password)
+        return password and plain_text_password and bcrypt.checkpw(plain_text_password.encode('utf-8'), password.encode('utf-8'))
 
     @classmethod
     def create(cls, email, password, first_name=None, last_name=None):

@@ -1,0 +1,76 @@
+<div class="mui-row">
+    <div class="mui-col-xs-12 mui-col-xs-offset-0 mui-col-md-8 mui-col-md-offset-2 mui-col-lg-6 mui-col-lg-offset-3">
+	    <table class="mui-table mui-table--bordered todo-list" cellspacing="0">
+            <thead>
+                <tr class="need">
+				    <td width="1%" class="mui--text-center">
+					    <button type="button" class="icon-button select {{disabled.class}}" ng-click="markAll(!allChecked)" ng-disabled="isDisabled">
+                            <i class="material-icons">keyboard_arrow_down</i>
+                        </button>
+				    </td>
+				    <td colspan="2" class="mui--text-left">
+                        <form ng-submit="addTodo()">
+				            <div class="mui-textfield">
+					            <input type="text" placeholder="What needs to be done?" ng-model="newTodo" ng-disabled="saving" todo-focus="lastChange">
+				            </div>
+                        </form>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td colspan="3" class="mui--text-center summary">
+                        <div class="mui-row">
+                            <div class="mui-col-xs-12 mui-col-lg-3 mui--text-left">
+                                <ng-pluralize count="remainingCount" when="{ one: '{} item left', other: '{} items left' }">items left</ng-pluralize>
+                            </div>
+                            <div class="mui-col-xs-12 mui-col-lg-6">
+				                <ul class="filters mui-list--inline">
+						            <li>
+							            <a ng-class="{'mui-btn--raised': status == '', 'mui-btn--flat': status != ''} " href="#!/" class="mui-btn mui-btn--small">All</a>
+						            </li>
+						            <li>
+							            <a ng-class="{'mui-btn--raised': status == 'active', 'mui-btn--flat': status != 'active'}" href="#!/active" class="mui-btn mui-btn--small">Active</a>
+						            </li>
+						            <li>
+							            <a ng-class="{'mui-btn--raised': status == 'completed', 'mui-btn--flat': status != 'completed'}" href="#!/completed" class="mui-btn mui-btn--small">Completed</a>
+						            </li>
+					            </ul>
+                            </div>
+                            <div class="mui-col-xs-12 mui-col-lg-3 mui--text-right">
+                                <a href ng-click="clearCompletedTodos();">Clear Completed</a>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </thead>
+		    <tbody>
+                <tr ng-show="todos.length == 0">
+                    <td colspan="3" class="mui--text-center mui--text-dark-hint">
+                        nothing left to do!
+                    </td>
+                </tr>
+			    <tr ng-repeat="todo in todos | filter:statusFilter track by $index" ng-class="{completed: todo.is_complete, editing: todo == editedTodo}">
+				    <td width="1%" class="mui--text-left">
+					    <button type="button" class="icon-button select {{disabled.class}}" ng-click="toggleCompleted(todo);" ng-disabled="isDisabled">
+                            <i ng-if="!todo.is_complete" class="material-icons">radio_button_unchecked</i>
+                            <i ng-if="todo.is_complete" class="material-icons">radio_button_checked</i>
+                        </button>
+				    </td>
+				    <td class="mui--text-left">
+			            <label ng-dblclick="editTodo(todo)">{{todo.title}}</label>
+                        <form ng-submit="saveEdits(todo, 'submit')">
+				            <div class="mui-textfield">
+                                <input class="edit" ng-trim="false" ng-model="todo.title" todo-escape="revertEdits(todo)" ng-blur="saveEdits(todo, 'blur')" todo-focus="todo == editedTodo">
+                            </div>
+                        </form>
+				    </td>
+				    <td width="1%" class="mui--text-right">
+					    <button type="button" class="icon-button delete {{disabled.class}}" ng-click="removeTodo(todo);" ng-disabled="isDisabled">
+						    <i class="material-icons mui--text-accent">clear</i>
+					    </button>
+				    </td>
+			    </tr>
+		    </tbody>
+	    </table>
+    </div>
+</div>

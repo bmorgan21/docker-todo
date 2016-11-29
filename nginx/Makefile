@@ -5,9 +5,9 @@ REPO = nginx
 NAME = nginx
 INSTANCE = default
 
-MAJOR = 1
-MINOR = 10
-PATCH = 2
+MAJOR = 2
+MINOR = 1
+PATCH = 0
 
 .PHONY: build push shell run start stop rm release
 

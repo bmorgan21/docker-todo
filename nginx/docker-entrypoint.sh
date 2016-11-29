@@ -24,6 +24,8 @@ if [ "$1" = 'nginx' ]; then
 			  listen       80 default_server;
 			  server_name  $SERVER_NAME;
 
+              root /www/data;
+
 			  location @upstream {
 			    internal;
 
@@ -32,7 +34,11 @@ if [ "$1" = 'nginx' ]; then
 			    uwsgi_read_timeout 300;
 			  }
 
-			  location / {
+			  location /api/ {
+			    try_files \$uri @upstream;
+			  }
+
+			  location /swaggerui/ {
 			    try_files \$uri @upstream;
 			  }
 			}
@@ -62,6 +68,8 @@ EOF
 			  listen       80 default_server;
 			  server_name  $SERVER_NAME;
 
+              root /www/data;
+
 			  location @upstream {
 			    internal;
 
@@ -73,7 +81,11 @@ EOF
 			    proxy_pass  $HTTP_UPSTREAM_HOST:$HTTP_UPSTREAM_PORT;
 			  }
 
-			  location / {
+			  location /api/ {
+			    try_files \$uri @upstream;
+			  }
+
+			  location /swaggerui/ {
 			    try_files \$uri @upstream;
 			  }
 			}

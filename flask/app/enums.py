@@ -1,4 +1,4 @@
-from ct_core_api.api.lib.enum import Enum
+from enum21 import Enum
 
 
 class Role(Enum):

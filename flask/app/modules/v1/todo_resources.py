@@ -23,7 +23,7 @@ class TodoCollectionResource(APIResource):
 
     @login_required
     @api.response(todo_schemas.TodoSchema(many=True))
-    def get(self, args):
+    def get(self):
         """Get all Todos."""
         return TodoService.get_many(user_id=current_user.id)
 
@@ -34,7 +34,8 @@ class TodoCollectionResource(APIResource):
     def post(self, args):
         """Create a new Todo."""
         with api.commit_or_abort(db.session, default_error_message=u"Failed to create a new Todo."):
-            new_todo = TodoService.create(**args)
+            new_todo = TodoService.create(user_id=current_user.id, **args)
+            db.session.add(new_todo)
         return new_todo
 
 
@@ -57,11 +58,11 @@ class TodoResource(APIResource):
     def patch(self, args, todo):
         """Patch todo details by id."""
         with api.commit_or_abort(db.session, default_error_message=u'Failed to update todo details.'):
-            TodoService.update(todo, **args)
+            TodoService.update(todo, args)
         return todo
 
     @api.response(code=response.HTTPStatus.NO_CONTENT)
     def delete(self, todo):
         """Delete todo by id."""
         with api.commit_or_abort(db.session, default_error_message=u'Failed to delete todo.'):
-            TodoService.delete(todo)
+            TodoService.delete(todo.id)

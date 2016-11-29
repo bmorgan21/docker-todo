@@ -1,0 +1,16 @@
+{
+  "name": "todo-docker",
+  "description": "Todo Docker Application",
+  "version": "0.0.0",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "angular": "~1.5.9",
+    "angular-cookies": "~1.5.9",
+    "angular-resource": "~1.5.9",
+    "angular-route": "~1.5.9",
+    "angular-loader": "~1.5.9",
+    "angular-mocks": "~1.5.9",
+    "mui": "~0.9.5"
+  }
+}

@@ -1,6 +1,6 @@
-from app.modules import admin, auth, todo, todo_api, user
+from app.modules import v1
 
 
 def init_app(app):
-    for module in (admin, auth, todo, todo_api, user):
+    for module in (v1,):
         module.init_app(app)

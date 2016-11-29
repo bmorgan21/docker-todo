@@ -1,0 +1,69 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Todo Docker</title>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="stylesheet" href="bower_components/mui/packages/npm/dist/css/mui.min.css" rel="stylesheet" type="text/css" />
+        <link rel="stylesheet prefetch" href="//fonts.googleapis.com/css?family=Roboto+Condensed:300,400,500,700&amp;subset=latin,latin-ext">
+        <link rel="stylesheet prefetch" href="//fonts.googleapis.com/icon?family=Material+Icons">
+        <link rel="stylesheet" href="app.css">
+    </head>
+
+    <body ng-app="todoDocker">
+		<header class="mui-appbar">
+            <div class="mui-row">
+			    <div class="mui-col-xs-12 mui-col-xs-offset-0 mui-col-md-6 mui-col-md-offset-3">
+                    <mui-dropdown color="accent" label="<i class='material-icons'>account_circle</i>" variant="fab" right-align class="mui--pull-right">
+                        <mui-dropdown-item link="#/settings"><i class="material-icons">settings</i> Settings</mui-dropdown-item>
+                        <mui-dropdown-item link="#/change-password"><i class="material-icons">vpn_key</i> Change Password</mui-dropdown-item>
+                        <mui-dropdown-item link="#/about"><i class="material-icons">info_outline</i> About</mui-dropdown-item>
+                        <mui-divider></mui-divider>
+                        <mui-dropdown-item link="#!/logout"><i class="material-icons">exit_to_app</i> Log Out</mui-dropdown-item>
+                    </mui-dropdown>
+
+				    <ul class="mui-list--inline">
+					    <li>
+						    <h1 class="mui--text-title"><a href="#!/">Todo Docker</a></h1>
+					    </li>
+					    <li>
+						    <button class="icon-button info mui--align-middle {{disabled.class}}" ng-disabled="isDisabled" onclick="activateModal()">
+							    <i class="material-icons">info_outline</i>
+						    </button>
+					    </li>
+				    </ul>
+			    </div>
+            </div>
+		</header>
+
+        <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+            <![endif]-->
+
+		<div id="content-wrapper">
+            <ng-view></ng-view>
+
+            <todo-login></todo-login>
+		</div>
+
+        <script src="bower_components/angular/angular.js"></script>
+        <script src="bower_components/angular-cookies/angular-cookies.js"></script>
+        <script src="bower_components/angular-route/angular-route.js"></script>
+        <script src="bower_components/angular-resource/angular-resource.js"></script>
+        <script src="bower_components/mui/packages/npm/dist/angular/mui-angular.min.js"></script>
+        <script src="app.js"></script>
+        <script src="components/todoLogin.js"></script>
+        <script src="config/auth.js"></script>
+        <script src="controllers/LogoutCtrl.js"></script>
+        <script src="controllers/todoCtrl.js"></script>
+        <script src="directives/todoFocus.js"></script>
+        <script src="directives/todoEscape.js"></script>
+        <script src="services/auth-service.js"></script>
+        <script src="services/todo-resource.js"></script>
+        <script src="services/token-resource.js"></script>
+        <script src="util/base64.js"></script>
+
+    </body>
+</html>

@@ -1,6 +1,6 @@
-from app.extensions import mail_ext, principal_ext, todo_api_ext
+from app.extensions import login_manager_ext, mail_ext, principal_ext, api_ext
 
 
 def init_app(app):
-    for module in (principal_ext, mail_ext, todo_api_ext):
+    for module in (login_manager_ext, principal_ext, mail_ext, api_ext):
         module.init_app(app)

@@ -64,6 +64,7 @@ CREATE TABLE `user` (
   `password` text,
   `temp_password` text,
   `password_expires` datetime DEFAULT NULL,
+  `tick` int(11) NOT NULL DEFAULT 1,
   `id` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`)
