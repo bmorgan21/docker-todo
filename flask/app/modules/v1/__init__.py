@@ -11,7 +11,7 @@ def init_app(app):
     api.add_namespace(todo_resources.api)
     api.add_namespace(token_resources.api)
 
-    api_v1_blueprint = Blueprint('api-v1', __name__, url_prefix='/api/v1')
+    api_v1_blueprint = Blueprint('api-v1', __name__, url_prefix='/v1')
 
     api.init_app(api_v1_blueprint)
     app.register_blueprint(api_v1_blueprint)

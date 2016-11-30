@@ -1,11 +1,3 @@
-############################################################
-# Dockerfile to build Docker-Todo NGinx
-#
-# Build with: IMAGE=$(docker build -q . | egrep -o "\w+$"); for v in latest 1.10.2 1.10 1; do docker tag $IMAGE brianmorgan/nginx:$v; done
-#
-# To push: for v in latest 1.10.2 1.10 1; do docker push brianmorgan/nginx:$v; done
-############################################################
-
 FROM ubuntu:xenial
 
 MAINTAINER Docker Todo "docker-todo@gocatalant.com"

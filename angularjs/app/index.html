@@ -17,9 +17,9 @@
             <div class="mui-row">
 			    <div class="mui-col-xs-12 mui-col-xs-offset-0 mui-col-md-6 mui-col-md-offset-3">
                     <mui-dropdown color="accent" label="<i class='material-icons'>account_circle</i>" variant="fab" right-align class="mui--pull-right">
-                        <mui-dropdown-item link="#/settings"><i class="material-icons">settings</i> Settings</mui-dropdown-item>
-                        <mui-dropdown-item link="#/change-password"><i class="material-icons">vpn_key</i> Change Password</mui-dropdown-item>
-                        <mui-dropdown-item link="#/about"><i class="material-icons">info_outline</i> About</mui-dropdown-item>
+                        <mui-dropdown-item link="#!/settings"><i class="material-icons">settings</i> Settings</mui-dropdown-item>
+                        <mui-dropdown-item link="#!/change-password"><i class="material-icons">vpn_key</i> Change Password</mui-dropdown-item>
+                        <mui-dropdown-item link="#!/about"><i class="material-icons">info_outline</i> About</mui-dropdown-item>
                         <mui-divider></mui-divider>
                         <mui-dropdown-item link="#!/logout"><i class="material-icons">exit_to_app</i> Log Out</mui-dropdown-item>
                     </mui-dropdown>
@@ -56,10 +56,11 @@
         <script src="app.js"></script>
         <script src="components/todoLogin.js"></script>
         <script src="config/auth.js"></script>
-        <script src="controllers/LogoutCtrl.js"></script>
+        <script src="controllers/logoutCtrl.js"></script>
         <script src="controllers/todoCtrl.js"></script>
         <script src="directives/todoFocus.js"></script>
         <script src="directives/todoEscape.js"></script>
+        <script src="services/api-service.js"></script>
         <script src="services/auth-service.js"></script>
         <script src="services/todo-resource.js"></script>
         <script src="services/token-resource.js"></script>

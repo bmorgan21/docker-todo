@@ -1,6 +1,6 @@
 angular.module('todoDocker')
-    .factory('Token', function($resource) {
-        return $resource('/api/v1/tokens/', null,
+    .factory('Token', function($resource, Api) {
+        return $resource(Api.getServer() + '/v1/tokens/', null,
                          {
                              'create': { method:'POST' }
                          });

@@ -14,4 +14,4 @@ SWAGGER_UI_JSONEDITOR = False
 # TODO: Consider disabling `ct-core-api` auth module by default as it introduces oauth2 libs
 # Exclude the `ct-core-api` auth module
 ENABLED_MODULES = filter(lambda x: x not in {'auth'}, config.ProductionConfig.AVAILABLE_MODULES)
-ENABLED_EXTENSIONS = filter(lambda x: x not in {'login_manager_ext', 'oauth2_ext'}, config.ProductionConfig.AVAILABLE_EXTENSIONS)
+ENABLED_EXTENSIONS = filter(lambda x: x not in {'cors_ext', 'login_manager_ext', 'oauth2_ext'}, config.ProductionConfig.AVAILABLE_EXTENSIONS)

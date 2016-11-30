@@ -10,21 +10,23 @@ if [ "$1" = 'nginx' ]; then
 
 		echo 'NGinx creating uwsgi proxy file'
 
-		if [ -z "$SERVER_NAME" ]; then
-			SERVER_NAME=_
+		if [ -z "$UWSGI_PROXY_SERVER_NAME" ]; then
+			UWSGI_PROXY_SERVER_NAME=_
 		fi
 
 		if [ -z "$UWSGI_UPSTREAM_PORT" ]; then
 			UWSGI_UPSTREAM_PORT=3031
 		fi
 
+	    if [ -z "$UWSGI_PROXY_PORT" ]; then
+		    UWSGI_PROXY_PORT = "80 default";
+	    fi
+
 		cat <<- EOF > "$UWSGI_PROXY_FILE"
 
 			server {
-			  listen       80 default_server;
-			  server_name  $SERVER_NAME;
-
-              root /www/data;
+			  listen       $UWSGI_PROXY_PORT;
+			  server_name  $UWSGI_PROXY_SERVER_NAME;
 
 			  location @upstream {
 			    internal;
@@ -34,11 +36,7 @@ if [ "$1" = 'nginx' ]; then
 			    uwsgi_read_timeout 300;
 			  }
 
-			  location /api/ {
-			    try_files \$uri @upstream;
-			  }
-
-			  location /swaggerui/ {
+			  location / {
 			    try_files \$uri @upstream;
 			  }
 			}
@@ -54,21 +52,23 @@ EOF
 
 		echo 'NGinx creating HTTP proxy file'
 
-		if [ -z "$SERVER_NAME" ]; then
-			SERVER_NAME=_
+		if [ -z "$HTTP_PROXY_SERVER_NAME" ]; then
+			HTTP_PROXY_SERVER_NAME=_
 		fi
 
 		if [ -z "$HTTP_UPSTREAM_PORT" ]; then
 			HTTP_UPSTREAM_PORT=80
 		fi
 
+		if [ -z "$HTTP_PROXY_PORT" ]; then
+			HTTP_PROXY_PORT="80  default_server"
+		fi
+
 		cat <<- EOF > "$HTTP_PROXY_FILE"
 
 			server {
-			  listen       80 default_server;
-			  server_name  $SERVER_NAME;
-
-              root /www/data;
+			  listen       $HTTP_PROXY_PORT;
+			  server_name  $HTTP_PROXY_SERVER_NAME;
 
 			  location @upstream {
 			    internal;
@@ -81,11 +81,7 @@ EOF
 			    proxy_pass  $HTTP_UPSTREAM_HOST:$HTTP_UPSTREAM_PORT;
 			  }
 
-			  location /api/ {
-			    try_files \$uri @upstream;
-			  }
-
-			  location /swaggerui/ {
+			  location / {
 			    try_files \$uri @upstream;
 			  }
 			}
@@ -93,6 +89,53 @@ EOF
 EOF
 
 	fi
+
+	STATIC_FILE=/etc/nginx/conf.d/static.conf
+
+	# shellcheck disable=SC2153
+	if [ ! -f "$STATIC_FILE" ] && [ -n "$STATIC_ROOT_DIR" ]; then
+
+		echo 'NGinx creating Static file'
+
+		if [ -z "$STATIC_SERVER_NAME" ]; then
+			STATIC_SERVER_NAME=_
+		fi
+
+		if [ -z "$STATIC_PORT" ]; then
+			STATIC_PORT="80 default_server"
+		fi
+
+		cat <<- EOF > "$STATIC_FILE"
+
+			server {
+			  listen       $STATIC_PORT;
+			  server_name  $STATIC_SERVER_NAME;
+
+              root $STATIC_ROOT_DIR;
+			}
+
+EOF
+
+	fi
+
+    if [ ! -f "/tmp/nginx_first_run" ]; then
+
+        # Invoke extra commands
+        echo
+        for f in /docker-entrypoint-init-nginx.d/*; do
+            case "$f" in
+                *.sh)     echo "$0: running $f"; . "$f" ;;
+                *)        echo "$0: ignoring $f" ;;
+            esac
+            echo
+        done
+
+        touch "/tmp/nginx_first_run"
+
+        echo
+        echo 'UWSGI init process done. Ready for start up.'
+        echo
+    fi
 
     echo
     echo 'Nginx init process done. Ready for start up.'

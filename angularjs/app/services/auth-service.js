@@ -1,6 +1,7 @@
 angular.module('todoDocker')
     .factory('Auth', function($cookies) {
         var token = $cookies.get('token');
+        var auth_mode = 'query';
 
         return {
             setToken: function(value) {
@@ -9,6 +10,9 @@ angular.module('todoDocker')
             },
             getToken: function() {
                 return token;
+            },
+            getAuthMode: function() {
+                return auth_mode;
             }
         };
     });
