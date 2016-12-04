@@ -15,3 +15,35 @@ angular.module('todoDocker')
     });
 EOF
 fi
+
+ANGULARJS_FILE=/etc/nginx/conf.d/angularjs.conf
+
+# shellcheck disable=SC2153
+if [ ! -f "$ANGULARJS_FILE" ] && [ -n "$ANGULARJS_ROOT_DIR" ]; then
+
+	echo 'NGinx creating AngularJS file'
+
+	if [ -z "$ANGULARJS_SERVER_NAME" ]; then
+		ANGULARJS_SERVER_NAME=_
+	fi
+
+	if [ -z "$ANGULARJS_PORT" ]; then
+		ANGULARJS_PORT="80 default_server"
+	fi
+
+	cat <<- EOF > "$ANGULARJS_FILE"
+
+			server {
+			  listen       $ANGULARJS_PORT;
+			  server_name  $ANGULARJS_SERVER_NAME;
+
+              location / {
+                  root $ANGULARJS_ROOT_DIR/app;
+              }
+
+              location /bower_components/ {
+                  root $ANGULARJS_ROOT_DIR;
+              }
+			}
+EOF
+fi

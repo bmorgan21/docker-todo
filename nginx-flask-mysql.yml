@@ -20,14 +20,14 @@ services:
       HTTP_PROXY_PORT: 8080
       HTTP_UPSTREAM_HOST: http://api
       HTTP_UPSTREAM_PORT: 5000
-      ANGULAR_API_SERVER: http://127.0.0.1:9191
+      ANGULAR_API_SERVER: http://127.0.0.1:9090
     links:
       - api
     ports:
       - "80:80"
-      - "9191:8080"
+      - "9090:8080"
     volumes:
-      - ./angularjs:/www/data
+      - ./angularjs/app:/www/data/app
 
   api:
     image: brianmorgan/flask:latest
