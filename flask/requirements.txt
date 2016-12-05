@@ -1,4 +1,4 @@
-ct-core-api==2.1.0b0
+ct-core-api==2.4.0
 Flask-Principal==0.4.0
 Flask-Mail==0.9.1
 ModelManager==0.1.1
