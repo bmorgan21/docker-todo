@@ -46,9 +46,11 @@ class UserService(Service):
         return password and plain_text_password and bcrypt.checkpw(plain_text_password.encode('utf-8'), password.encode('utf-8'))
 
     @classmethod
-    def create(cls, email, password, first_name=None, last_name=None):
-        user = cls.__manager__.create(first_name=first_name, last_name=last_name, email=email)
-        cls.set_password(user, password)
+    def create(cls, **kwargs):
+        password = kwargs.pop('password')
+        user = cls.__manager__.create(**kwargs)
+        if password:
+            cls.set_password(user, password)
         return user
 
     @classmethod

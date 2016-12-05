@@ -33,17 +33,18 @@ class TokenCollectionResource(APIResource):
             response.abort(response.Unauthorized.code)
 
         verified = False
-        if UserService.check_password(user.password, args['password']):
-            verified = True
-        elif UserService.check_password(user.temp_password, args['password']):
-            verified = True
-            # these are only good once
-            UserService.set_password(user, None, attr='temp_password')
+        if user.verified:
+            if UserService.check_password(user.password, args['password']):
+                verified = True
+            elif UserService.check_password(user.temp_password, args['password']):
+                verified = True
+                # these are only good once
+                UserService.set_password(user, None, attr='temp_password')
 
         if verified:
             token = login_user(user)  # user.tick is bumped with each login
 
             db.session.commit()
-            return {'token': token}
+            return {'user_id': user.id, 'token': token}
         else:
             response.abort(response.Unauthorized.code)

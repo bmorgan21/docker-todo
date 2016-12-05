@@ -1,1 +1,1 @@
-INSERT INTO user (email, password, tick) VALUES ('demo@tododocker.com', '$2b$12$8eyPHS4N0f.fEzXhMI0SF.ffhXfjo/oWum6Q90ezXRWRobLX6k4fG', 1);
+INSERT INTO user (first_name, last_name, email, password, tick, verified, verified_at) VALUES ('Demo', 'Account', 'demo@tododocker.com', '$2b$12$8eyPHS4N0f.fEzXhMI0SF.ffhXfjo/oWum6Q90ezXRWRobLX6k4fG', 1, 1, '2016-12-05 07:34');

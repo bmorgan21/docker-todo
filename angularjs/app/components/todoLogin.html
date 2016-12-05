@@ -1,15 +1,25 @@
 <div class="modal" ng-if="$ctrl.show">
 	<div class="mui-col-xs-10 mui-col-xs-offset-1 mui-col-md-4 mui-col-md-offset-4 mui-panel">
 		<h3 class="mui--text-center mui--text-black-54">Login</h3>
-		<form ng-submit="$ctrl.login($ctrl.auth)">
+		<form name="login" ng-submit="login.$valid && $ctrl.login($ctrl.auth)" novalidate ng-model-options="{ updateOn: 'default blur', debounce: { default: 500, blur: 0 } }">
 			<div class="mui-textfield">
-				<input type="text" ng-model="$ctrl.auth.email" placeholder="user@example.com" required>
+				<input name="email" type="email" ng-model="$ctrl.auth.email" placeholder="user@example.com" required="required" todo-focus="$ctrl.show">
 				<label for="site-title">Email</label>
+                <div class="mui--text-danger" ng-show="login.$submitted || login.email.$touched">
+                    <span ng-show="login.email.$error.required"><i class="material-icons">error</i> Tell us your email.</span>
+                    <span ng-show="login.email.$error.email"><i class="material-icons">error</i> This is not a valid email.</span>
+                </div>
 			</div>
 			<div class="mui-textfield">
-				<input type="password" id="site-url" class="mui--text-black-54" ng-model="$ctrl.auth.password" placeholder="the secret sauce" required />
+				<input name="password" type="password" id="site-url" class="mui--text-black-54" ng-model="$ctrl.auth.password" placeholder="the secret sauce" required />
 				<label for="site-url">Password</label>
+                <div class="mui--text-danger" ng-show="login.$submitted || login.password.$touched">
+                    <span ng-show="login.password.$error.required"><i class="material-icons">error</i> Tell us your password.</span>
+                </div>
 			</div>
+            <div class="mui--text-danger" ng-show="$ctrl.error">
+                <i class="material-icons">error</i> {{ $ctrl.error }}
+            </div>
 			<div class="mui--text-center">
 				<button type="submit" class="mui-btn mui-btn--flat mui-btn--accent">
 					Login

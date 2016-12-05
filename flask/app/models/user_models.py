@@ -16,6 +16,8 @@ class User(db.Model, UserMixin):
     password_expires = db.Column(db.DateTime)
 
     tick = db.Column(db.Integer, nullable=False, default=1)
+    verified = db.Column(db.Boolean, nullable=False, default=False)
+    verified_at = db.Column(db.DateTime)
 
 
 class Role(db.Model):

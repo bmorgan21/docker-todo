@@ -7,6 +7,18 @@ angular.module('todoDocker', ['mui', 'ngCookies', 'ngRoute', 'ngResource', 'app.
 
         $routeProvider
             .when('/', routeConfig)
+            .when('/about', {
+                controller: 'AboutCtrl',
+                templateUrl: 'controllers/about.html'
+            })
+            .when('/account', {
+                controller: 'AccountCtrl',
+                templateUrl: 'controllers/account.html'
+            })
+            .when('/change-password', {
+                controller: 'ChangePasswordCtrl',
+                templateUrl: 'controllers/change-password.html'
+            })
             .when('/logout', {
                 controller: 'LogoutCtrl',
                 template: ''

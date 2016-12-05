@@ -66,6 +66,8 @@ CREATE TABLE `user` (
   `password_expires` datetime DEFAULT NULL,
   `tick` int(11) NOT NULL DEFAULT 1,
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `verified` tinyint(1) NOT NULL DEFAULT '0',
+  `verified_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;

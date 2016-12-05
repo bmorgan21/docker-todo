@@ -41,8 +41,7 @@ header .mui-dropdown {
 }
 
 header .mui-dropdown__menu .material-icons {
-    vertical-align: middle;
-    margin-right: 10px;
+    margin-right: 5px;
 }
 
 header .mui-dropdown__menu>li>a {
@@ -217,4 +216,12 @@ tr:hover button.delete {
 
 .todo-list tr.completed label {
     text-decoration: line-through;
+}
+
+.material-icons {
+    vertical-align: middle;
+}
+
+input.ng-invalid {
+    border-color: #F44336;
 }
