@@ -25,3 +25,6 @@ down:
 
 up:
 	docker-compose -f nginx-flask-mysql.yml -f local.yml -p $(NAME) up
+
+pull:
+	docker-compose -f nginx-flask-mysql.yml -f local.yml pull
