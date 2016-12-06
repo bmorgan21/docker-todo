@@ -5,7 +5,6 @@ from flask_login import current_user, login_required
 from ct_core_api.api.core import response
 from ct_core_api.api.core.namespace import APINamespace
 from ct_core_api.api.core.resource import APIResource
-from ct_core_api.api.core.schema import ma
 from ct_core_api.api.core.parameters import Parameters
 from ct_core_api.core.database import db
 

@@ -44,6 +44,6 @@ class TokenCollectionResource(APIResource):
             token = login_user(user)  # user.tick is bumped with each login
 
             db.session.commit()
-            return {'token': token}
+            return {'token': token, 'user_id': user.id}
         else:
             response.abort(response.Unauthorized.code)

@@ -5,5 +5,5 @@ from app.extensions.api_ext import api_v1_1
 
 def init_app(app):
     from app.modules import register_api_error_handlers
-    ah.register_api_resources(app, api_v1_1, __path__, __name__)
+    ah.register_api_resources(app, api_v1_1, __path__, __name__, url_prefix='')
     register_api_error_handlers(api_v1_1)
