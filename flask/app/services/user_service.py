@@ -30,9 +30,9 @@ class UserService(Service):
         return "".join(pwd)
 
     @staticmethod
-    def set_password(user, plain_text_password, attr='password'):
+    def _set_password(user, plain_text_password, attr='password'):
         if plain_text_password:
-            value = bcrypt.hashpw(plain_text_password, bcrypt.gensalt())
+            value = bcrypt.hashpw(plain_text_password.encode('utf-8'), bcrypt.gensalt())
         else:
             value = None
 
@@ -47,10 +47,18 @@ class UserService(Service):
 
     @classmethod
     def create(cls, **kwargs):
-        password = kwargs.pop('password')
+        password = kwargs.pop('password', None)
         user = cls.__manager__.create(**kwargs)
         if password:
-            cls.set_password(user, password)
+            cls._set_password(user, password)
+        return user
+
+    @classmethod
+    def update(cls, id, d):
+        password = d.pop('password', None)
+        user = cls.__manager__.update(id, d)
+        if password:
+            cls._set_password(user, password)
         return user
 
     @classmethod
@@ -60,7 +68,7 @@ class UserService(Service):
         if user:
             # give them a new password they can use to login with
             password = cls._mkpassword()
-            cls.set_password(user, password, attr='temp_password')
+            cls._set_password(user, password, attr='temp_password')
             email_service.send_reset_password(user, password)
 
         return user
