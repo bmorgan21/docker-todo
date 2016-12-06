@@ -7,3 +7,4 @@ class UserSchema(APISchema):
     first_name = ma.Str()
     last_name = ma.Str()
     email = ma.Email()
+    password = ma.Str(load_only=True)

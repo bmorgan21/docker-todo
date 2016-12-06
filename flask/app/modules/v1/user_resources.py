@@ -21,7 +21,7 @@ api = APINamespace('users', description="Users")
 @api.route('/')
 class UserCollectionResource(APIResource):
     class PostUserParameters(Parameters, user_schemas.UserSchema):
-        password = ma.Str()
+        pass
 
     @api.parameters(PostUserParameters(), locations=['json'])
     @api.response(user_schemas.UserSchema())
@@ -35,7 +35,6 @@ class UserCollectionResource(APIResource):
         return new_user
 
 
-@login_required
 @api.route('/<int:id>')
 @api.resolve_object_by_find('user', UserService.get)
 @api.response(code=response.Forbidden.code, description=u"Permission Denied.")
@@ -48,12 +47,14 @@ class UserResource(APIResource):
         if not (admin_permission.can() or current_user.id == user.id):
             response.abort(response.Forbidden)
 
+    @login_required
     @api.response(user_schemas.UserSchema())
     def get(self, user):
         """Get user details by id."""
         self._check_permission(user)
         return user
 
+    @login_required
     @api.parameters(PatchUserParameters(), locations=['json'])
     @api.response(user_schemas.UserSchema())
     @api.response(code=response.Conflict.code)

@@ -1,3 +1,27 @@
-<div>
-    account
+<div class="mui-col-xs-12 mui-col-xs-offset-0 mui-col-md-6 mui-col-md-offset-3">
+    <h1>Account</h1>
+	<form name="account" ng-submit="account.$valid && $ctrl.save($ctrl.user)" novalidate ng-model-options="{ updateOn: 'default blur', debounce: { default: 500, blur: 0 } }">
+		<div class="mui-textfield">
+			<input name="first_name" type="text" ng-model="$ctrl.user.first_name" required="required">
+			<label for="site-title">First Name</label>
+            <div class="mui--text-danger" ng-show="account.$submitted || account.first_name.$touched">
+                <span ng-show="account.first_name.$error.required"><i class="material-icons">error</i> Tell us your first name.</span>
+            </div>
+		</div>
+		<div class="mui-textfield">
+			<input name="last_name" type="last_name" ng-model="$ctrl.user.last_name" required="required">
+			<label for="site-title">Last Name</label>
+            <div class="mui--text-danger" ng-show="account.$submitted || account.last_name.$touched">
+                <span ng-show="account.last_name.$error.required"><i class="material-icons">error</i> Tell us your last name.</span>
+            </div>
+		</div>
+		<div class="mui--text-center">
+			<button ng-click="$ctrl.cancel()" class="mui-btn mui-btn--flat mui-btn--accent">
+				Cancel
+			</button>
+			<button type="submit" class="mui-btn mui-btn--flat mui-btn--accent">
+                Save
+			</button>
+		</div>
+    </form>
 </div>

@@ -39,7 +39,6 @@ class TodoCollectionResource(APIResource):
         return new_todo
 
 
-@login_required
 @api.route('/<int:id>')
 @api.resolve_object_by_find('todo', TodoService.get)
 @api.response(code=response.NotFound.code, description=u"Todo not found.")
@@ -47,11 +46,13 @@ class TodoResource(APIResource):
     class PatchTodoParameters(Parameters, todo_schemas.TodoSchema):
         pass
 
+    @login_required
     @api.response(todo_schemas.TodoSchema())
     def get(self, todo):
         """Get todo details by id."""
         return todo
 
+    @login_required
     @api.parameters(PatchTodoParameters(), locations=['json'])
     @api.response(todo_schemas.TodoSchema())
     @api.response(code=response.Conflict.code)
@@ -61,6 +62,7 @@ class TodoResource(APIResource):
             TodoService.update(todo, args)
         return todo
 
+    @login_required
     @api.response(code=response.HTTPStatus.NO_CONTENT)
     def delete(self, todo):
         """Delete todo by id."""
