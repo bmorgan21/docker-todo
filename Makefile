@@ -9,10 +9,8 @@ init:
 	echo "version: '2'" > local.yml
 
 dump-schema:
-	docker exec $(NAME)_db_1 /bin/bash -c 'mysql -u root -p"$$MYSQL_ROOT_PASSWORD" -e "DROP DATABASE IF EXISTS db_0; CREATE DATABASE db_0;"'
-	docker exec $(NAME)_db_1 /bin/bash -c 'mysql -u root -p"$$MYSQL_ROOT_PASSWORD" -v -e "GRANT ALL PRIVILEGES ON db_0.* TO api_user@\"%\";"'
-	docker exec $(NAME)_web_1 /bin/bash -c 'flask initdb --uri="mysql://$$MYSQL_USER:$$MYSQL_PASSWORD@db:3306/db_0"'
-	docker exec $(NAME)_db_1 /bin/bash -c 'mysqldump -u root -p"$$MYSQL_ROOT_PASSWORD" --no-data db_0' > flask/schema.sql
+	docker exec $(NAME)_api_1 /bin/bash -c 'flask db diff'
+	docker exec $(NAME)_db_1 /bin/bash -c 'mysqldump -u root -p"$$MYSQL_ROOT_PASSWORD" db_0' > flask/db/schema.sql
 
 shell:
 	docker exec -it $(NAME)_$(word 2, $(MAKECMDGOALS) )_1 /bin/bash
@@ -28,3 +26,16 @@ up:
 
 pull:
 	docker-compose -f nginx-flask-mysql.yml -f local.yml pull
+
+reset:         ## Remove files created during container setup
+	rm -f flask/instance/settings.cfg
+	rm -f angularjs/app/services/api-service.js
+
+stop:          ## Stop all docker containers
+	docker ps -a -q | xargs docker stop
+
+remove:        ## Remove all docker containers with their volumes
+	docker ps -a -q | xargs docker rm -v
+
+remove-volumes:## Remove all dangling volumes
+	docker volume ls -qf dangling=true | xargs docker volume rm

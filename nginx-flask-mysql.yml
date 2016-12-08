@@ -4,13 +4,14 @@ services:
   db:
     image: mysql:5.7
     environment:
-      MYSQL_ROOT_PASSWORD: XX34!dfd%sd^&
+      MYSQL_ROOT_PASSWORD: XX34!dfd@sd^&
       MYSQL_DATABASE: todo_app
       MYSQL_USER: api_user
       MYSQL_PASSWORD: password
     volumes:
       - ./flask/db/schema.sql:/docker-entrypoint-initdb.d/1.sql
       - ./flask/db/sample.sql:/docker-entrypoint-initdb.d/2.sql
+      - ./flask/db/dev_setup.sql:/docker-entrypoint-initdb.d/3.sql
 
   angularjs:
     image: brianmorgan/angularjs:latest
@@ -30,7 +31,7 @@ services:
       - ./angularjs/app:/www/data/app
 
   api:
-    image: brianmorgan/flask:latest
+    image: brianmorgan/flask-devtools:latest
     depends_on:
       - db
       - postfix
