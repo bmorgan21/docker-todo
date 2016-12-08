@@ -20,6 +20,6 @@ To log into the system, you can log into the default account (created by flask/d
   * __email:__ demo@tododocker.com
   * __password:__ password
   
- ## Resetting the Server
+## Resetting the Server
  
- To stop the server press ctrl-c.  This will still keep the containers around, so if you run `make up` you will still have the same state as before.  If you would like to reset the database and any other data stored in the containers you can run `make down` followed by `make up`.  There are also a couple of files that are created the first time a container is run.  These items are usually stored in the container and don't need to be dealt with separately, but in development mode the local directory is mounted into the container causing these files to live independently of the container.  To clean up these extra files locally you can run `make reset`.
+To stop the server press ctrl-c.  This will still keep the containers around, so if you run `make up` you will still have the same state as before.  If you would like to reset the database and any other data stored in the containers you can run `make down` followed by `make up`.  There are also a couple of files that are created the first time a container is run.  These items are usually stored in the container and don't need to be dealt with separately, but in development mode the local directory is mounted into the container causing these files to live independently of the container.  To clean up these extra files locally you can run `make reset`.
