@@ -7,6 +7,7 @@ Todo Docker aims to build a collection of Todo Applications that can be used not
 This project relies heavily on Docker, so the first step is to install docker and create an account on hub.docker.com.
 
   * Go to https://hub.docker.com/ and create a free account.
+  * Log into your new account on the command line with `docker login`
   * Go to https://www.docker.com/products/overview and install the right version of docker for your OS.
 
 This project exposes a handful of scripts that are based on make and unix shell commands.  If you are on a non-unix based OS, it is recommended to perform these steps in a unix based VM.
